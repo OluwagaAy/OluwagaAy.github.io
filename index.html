@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ayomide Oluwaga</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* VOICE occasion: a trainer's personal site, confident and technical
+   IDEA a security operations console: live network map, terminal, alert cards
+   PICTURE an animated network of nodes and travelling packets behind the hero, with a portrait slot
+   COLOUR deep forest-ink ground, emerald signal, soft mint text, coral for alerts
+   TYPE Sora for display, Inter for text, JetBrains Mono only inside the terminal
+   LAYOUT hero: name and pitch left over the live network, portrait right; phone: stacked */
+:root{color-scheme:dark;--bg:#06130f;--bg2:#0a1d17;--panel:#0e2620;--line:#1d3d33;--ink:#e6f2ec;--mute:#9db8ad;--em:#19c37d;--em2:#7be8b8;--coral:#ff6b5a}
+*{box-sizing:border-box;min-width:0}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Inter,system-ui,sans-serif;overflow-x:clip}
+a{color:var(--em2)}
+img{max-width:100%}
+h1,h2,h3{font-family:Sora,Inter,sans-serif;line-height:1.08;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h2{font-size:clamp(28px,4vw,42px)}
+h3{font-size:19px}
+p{margin:0}
+.wrap{max-width:1240px;margin:0 auto}
+.band{padding-block:clamp(48px,7vw,96px);padding-inline:max(5vw,16px)}
+.alt{background:var(--bg2)}
+.lead{color:var(--mute);max-width:62ch;margin-top:12px}
+nav{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:20px;padding:12px max(5vw,16px);flex-wrap:wrap}
+.logo{font-family:Sora;font-weight:800;font-size:18px;color:var(--ink);text-decoration:none;margin-right:auto}
+.logo span{color:var(--em)}
+nav .links{display:flex;gap:18px;flex-wrap:wrap}
+nav .links a{color:var(--mute);text-decoration:none;font-size:15px}
+nav .links a:hover,nav .links a:focus-visible{color:var(--ink)}
+.btn{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:10px 20px;border-radius:10px;font-weight:600;text-decoration:none;border:1px solid var(--em);background:var(--em);color:#04140d;cursor:pointer;font:600 15px Inter,sans-serif}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn:hover{filter:brightness(1.1)}
+.btn:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--em2);outline-offset:2px}
+/* hero */
+.hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%}
+.hero .wrap{position:relative;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:40px;align-items:center;padding:clamp(48px,8vw,110px) max(5vw,16px);min-height:min(88svh,780px)}
+.hero h1{font-size:clamp(44px,7vw,82px);font-weight:800}
+.hero h1 em{font-style:normal;display:block;font-size:.42em;font-weight:600;color:var(--mute);letter-spacing:0;margin-top:14px}
+.rot{display:inline-block;color:var(--em2);font-weight:600;min-height:1.6em;border-right:2px solid var(--em);padding-right:4px}
+.hero .pitch{font-size:clamp(17px,1.6vw,20px);max-width:34ch;margin-top:18px}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.portrait{aspect-ratio:4/5;border-radius:22px;position:relative}
+.slot{border:2px dashed color-mix(in srgb,var(--em) 55%,var(--line));border-radius:18px;background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--panel) 80%,transparent) 0 14px,color-mix(in srgb,var(--bg2) 80%,transparent) 14px 28px);display:grid;place-items:center;text-align:center;color:var(--mute);font-size:14px;padding:16px;overflow:hidden}
+.slot svg{width:42px;height:42px;opacity:.7;display:block;margin:0 auto 8px}
+.slot img{width:100%;height:100%;object-fit:cover;border-radius:16px}
+.badge{position:absolute;left:-14px;bottom:24px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:flex;gap:10px;align-items:center;font-size:14px;box-shadow:0 10px 30px #0007}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--em);box-shadow:0 0 0 4px color-mix(in srgb,var(--em) 25%,transparent);flex:none}
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(11em,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-top:36px}
+.stat{background:var(--bg2);padding:22px}
+.stat b{display:block;font:800 clamp(30px,4vw,42px) Sora;color:var(--em2)}
+.stat span{color:var(--mute);font-size:14px}
+.logos{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.logos span{border:1px solid var(--line);border-radius:999px;padding:7px 14px;font-size:14px;color:var(--mute)}
+/* trainings */
+.head{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:28px}
+.tab{min-height:44px;padding:8px 16px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--mute);font:500 15px Inter;cursor:pointer}
+.tab[aria-pressed=true]{background:var(--em);color:#04140d;border-color:var(--em)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,290px),1fr));gap:16px;margin-top:22px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:10px;transition:border-color .2s,transform .2s}
+.card:hover{border-color:var(--em);transform:translateY(-2px)}
+.card .tag{align-self:flex-start;font-size:13px;color:var(--em2);background:color-mix(in srgb,var(--em) 14%,transparent);border-radius:6px;padding:3px 9px}
+.card p{color:var(--mute);font-size:15px}
+.card .who{font-size:14px;color:var(--ink);margin-top:auto;padding-top:8px;border-top:1px solid var(--line)}
+.card button{align-self:flex-start;background:none;border:0;color:var(--em2);font:600 15px Inter;cursor:pointer;padding:8px 0;min-height:44px}
+/* skills */
+.skills{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:28px;margin-top:32px;align-items:stretch}
+.domains{display:flex;flex-direction:column;gap:8px}
+.dom{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;min-height:52px;padding:12px 16px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:600 16px Inter;cursor:pointer}
+.dom small{color:var(--mute);font-weight:400;font-size:13px;white-space:nowrap}
+.dom[aria-pressed=true]{border-color:var(--em);background:color-mix(in srgb,var(--em) 12%,var(--panel))}
+.skillfig{position:relative;min-height:380px;border:1px solid var(--line);border-radius:16px;background:radial-gradient(circle at 50% 50%,color-mix(in srgb,var(--em) 10%,var(--bg2)),var(--bg2) 70%)}
+.skillfig svg{position:absolute;inset:0;width:100%;height:100%}
+.skillfig svg text{font:500 14px Inter;fill:var(--ink);paint-order:stroke;stroke:var(--bg2);stroke-width:4px}
+.evidence{margin-top:12px;color:var(--mute);font-size:15px}
+/* terminal */
+.term{margin-top:28px;background:#020a07;border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 20px 60px #0008}
+.term .bar{display:flex;gap:7px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--panel);font-size:13px;color:var(--mute)}
+.term .bar i{width:11px;height:11px;border-radius:50%;background:#3a5249}
+.term .bar i:first-child{background:var(--coral)}
+.term .bar span{margin-left:8px}
+.out{height:320px;overflow:auto;padding:16px;font:14px/1.6 "JetBrains Mono",monospace;color:#c6e8d8;white-space:pre-wrap;overflow-wrap:anywhere}
+.out .p{color:var(--em)}
+.out .c{color:var(--coral)}
+.term form{display:flex;align-items:center;gap:8px;border-top:1px solid var(--line);padding:6px 14px;font:15px "JetBrains Mono",monospace;color:var(--em)}
+.term input{flex:1;background:transparent;border:0;color:var(--ink);font:16px "JetBrains Mono",monospace;min-height:44px}
+.term input:focus{outline:none}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.chips button{min-height:40px;padding:6px 12px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--mute);font:14px "JetBrains Mono",monospace;cursor:pointer}
+/* timeline */
+.tl{margin-top:32px;display:grid;gap:0;border-left:2px solid var(--line);margin-left:8px}
+.tl li{list-style:none;position:relative;padding:0 0 26px 26px}
+.tl li::before{content:"";position:absolute;left:-8px;top:6px;width:14px;height:14px;border-radius:50%;background:var(--bg);border:2px solid var(--em)}
+.tl li.now::before{background:var(--em)}
+.tl .when{color:var(--em2);font-size:14px;white-space:nowrap}
+.tl h3{margin-top:2px}
+.tl p{color:var(--mute);font-size:15px;margin-top:4px;max-width:70ch}
+.tlwrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px}
+/* certs */
+.certs{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr));gap:12px;margin-top:28px}
+.cert{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;gap:12px;align-items:flex-start}
+.cert .ic{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;font:800 13px Sora;color:#04140d;background:var(--em2);flex:none}
+.cert b{display:block;font-size:15px}
+.cert span{color:var(--mute);font-size:13px}
+/* gallery */
+.gal{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:28px}
+.gal .slot{aspect-ratio:4/3}
+.gal .big{grid-column:span 2;grid-row:span 2;aspect-ratio:auto}
+/* projects */
+.proj a{text-decoration:none;color:inherit}
+/* contact */
+.contact{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px;margin-top:28px}
+form.req{display:grid;gap:14px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px}
+label{font-size:14px;color:var(--mute);display:grid;gap:6px}
+select,input,textarea{font:16px Inter;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-height:44px;width:100%}
+.row2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+.msg{background:#020a07;border:1px solid var(--line);border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:14px}
+.msg pre{margin:0;white-space:pre-wrap;font:15px/1.6 Inter;color:var(--ink);flex:1}
+.reach{display:grid;gap:8px;font-size:15px}
+.reach a{overflow-wrap:anywhere}
+footer{border-top:1px solid var(--line);padding:28px max(5vw,16px);color:var(--mute);font-size:14px}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(120px);background:var(--em);color:#04140d;font-weight:600;padding:12px 18px;border-radius:10px;transition:transform .3s;z-index:50}
+.toast.show{transform:translateX(-50%) translateY(0)}
+dialog{background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:18px;max-width:560px;width:calc(100% - 32px);padding:26px}
+dialog::backdrop{background:#000a}
+dialog ul{color:var(--mute);padding-left:20px}
+@media(max-width:900px){.hero .wrap{grid-template-columns:minmax(0,1fr);min-height:0}.portrait{max-width:360px}.skills,.tlwrap,.contact{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:600px){nav .links{display:none}.gal{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.gal .big{grid-column:span 2;grid-row:auto;aspect-ratio:4/3}.row2{grid-template-columns:minmax(0,1fr)}.badge{left:8px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<nav><div class="wrap">
+  <a class="logo" href="#top">Coach <span>A.Y.</span></a>
+  <div class="links"><a href="#trainings">Trainings</a><a href="#skills">Skills</a><a href="#journey">Journey</a><a href="#certs">Certifications</a><a href="#gallery">Gallery</a><a href="#contact">Contact</a></div>
+  <a class="btn" href="#contact">Book a training</a>
+</div></nav>
+
+<header class="hero" id="top">
+  <canvas id="net" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <div>
+      <h1>Ayomide Oluwaga<em>Known in the community as Coach A.Y.</em></h1>
+      <p class="pitch" style="margin-top:22px"><span class="rot" id="rot">Cybersecurity &amp; AI Trainer</span></p>
+      <p class="pitch">I help companies get secure and professionals get certified and hired. Not theory, not slide decks: the actual skills that keep systems safe.</p>
+      <div class="cta"><a class="btn" href="#contact">Request a training</a><a class="btn ghost" href="#console">Open my console</a></div>
+    </div>
+    <div class="portrait">
+      <div class="slot" style="height:100%" data-slot="portrait"><div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>Portrait photo goes here</div></div>
+      <div class="badge"><span class="dot"></span><div><b>Available</b><br><span style="color:var(--mute)">for corporate trainings</span></div></div>
+    </div>
+  </div>
+</header>
+
+<section class="band" id="about"><div class="wrap">
+  <h2>Training Africa's next line of defence</h2>
+  <p class="lead">I run hands-on cybersecurity training in Lagos and AI security training for organisations across Africa. As Co-Founder &amp; CEO of MAPELEAD and Managing Partner at ImpactEra, I build curricula that prepare people for the work, not just the exam. I'm also Vice President of the CSEAN Lagos State Branch, ICITP Ambassador for Nigeria, and a member of the CompTIA Instructor Network.</p>
+  <div class="stats">
+    <div class="stat"><b data-count="100" data-suffix="+">0</b><span>professionals trained in 2023 alone</span></div>
+    <div class="stat"><b data-count="14">0</b><span>certifications earned</span></div>
+    <div class="stat"><b data-count="4" data-suffix="+">0</b><span>years leading tech training</span></div>
+    <div class="stat"><b data-count="3">0</b><span>days of AI training for the World Bank × Microsoft Elevate series</span></div>
+  </div>
+  <div class="logos" aria-label="Organisations I have trained with"><span>Philips Consulting</span><span>Trainocate Gulf</span><span>ECOWAS Court of Justice</span><span>World Bank × Microsoft Elevate</span><span>ImpactEra</span><span>MAPELEAD</span><span>ICITP</span><span>Ha-Shem Limited</span></div>
+</div></section>
+
+<section class="band alt" id="trainings"><div class="wrap">
+  <div class="head"><div><h2>Trainings I deliver</h2><p class="lead">Private and corporate programmes, on-site in Lagos, across Africa, or virtual. Pick a track to see what I run.</p></div></div>
+  <div class="tabs" role="group" aria-label="Filter trainings" id="tabs"></div>
+  <div class="grid" id="tcards"></div>
+</div></section>
+
+<section class="band" id="skills"><div class="wrap">
+  <h2>Proficiencies</h2>
+  <p class="lead">Choose a domain to see the tools and frameworks I teach and use, and where the proof comes from.</p>
+  <div class="skills">
+    <div class="domains" id="domains"></div>
+    <div><div class="skillfig" id="skillfig"><svg id="skillsvg" role="img" aria-label="Tools in the selected domain"></svg></div><p class="evidence" id="evidence"></p></div>
+  </div>
+</div></section>
+
+<section class="band alt" id="console"><div class="wrap">
+  <h2>Ask my console</h2>
+  <p class="lead">A little terminal for the curious. Type <b>help</b>, or tap a command.</p>
+  <div class="term">
+    <div class="bar"><i></i><i></i><i></i><span>coach-ay@lagos:~</span></div>
+    <div class="out" id="out" aria-live="polite"></div>
+    <form id="tf"><span>$</span><input id="tin" autocomplete="off" spellcheck="false" aria-label="Terminal command" placeholder="type a command"></form>
+  </div>
+  <div class="chips" id="chips"></div>
+</div></section>
+
+<section class="band" id="journey"><div class="wrap">
+  <h2>Journey</h2>
+  <div class="tlwrap">
+    <ul class="tl" id="tl1"></ul>
+    <ul class="tl" id="tl2"></ul>
+  </div>
+</div></section>
+
+<section class="band alt" id="certs"><div class="wrap">
+  <h2>Certifications</h2>
+  <p class="lead">From CompTIA's most advanced security practitioner exam to Microsoft cloud and ISO 27001.</p>
+  <div class="certs" id="certlist"></div>
+</div></section>
+
+<section class="band" id="gallery"><div class="wrap">
+  <h2>In the room</h2>
+  <p class="lead">Moments from trainings, bootcamps and talks.</p>
+  <div class="gal" id="gal"></div>
+</div></section>
+
+<section class="band alt" id="projects"><div class="wrap">
+  <h2>Open-source for learners</h2>
+  <p class="lead">Free resources I maintain on GitHub for people breaking into tech.</p>
+  <div class="grid proj" id="projs"></div>
+</div></section>
+
+<section class="band" id="contact"><div class="wrap">
+  <h2>Book a training</h2>
+  <p class="lead">Tell me what your team needs. Your request is written for you on the right, ready to copy and send.</p>
+  <div class="contact">
+    <form class="req" id="req">
+      <label for="rorg">Organisation<input id="rorg" placeholder="e.g. Acme Bank"></label>
+      <label for="rtopic">Training<select id="rtopic"></select></label>
+      <div class="row2">
+        <label for="rsize">Team size<select id="rsize"><option>1 to 10</option><option selected>11 to 25</option><option>26 to 50</option><option>50+</option></select></label>
+        <label for="rfmt">Format<select id="rfmt"><option>On-site (Lagos)</option><option>On-site (elsewhere)</option><option selected>Virtual</option><option>Hybrid</option></select></label>
+      </div>
+      <label for="rwhen">Preferred timing<input id="rwhen" placeholder="e.g. Second week of January"></label>
+      <label for="rnote">Anything else<textarea id="rnote" rows="3" placeholder="Goals, level of the team, certification targets"></textarea></label>
+    </form>
+    <div class="msg">
+      <pre id="rout"></pre>
+      <div class="cta" style="margin-top:0"><button class="btn" id="copy" type="button">Copy request</button><a class="btn ghost" href="https://www.linkedin.com/in/ayomideoluwaga/">Message on LinkedIn</a></div>
+      <div class="reach"><span>Email: <a href="mailto:oluwagaayomide1@gmail.com">oluwagaayomide1@gmail.com</a></span><span>LinkedIn: <a href="https://www.linkedin.com/in/ayomideoluwaga/">linkedin.com/in/ayomideoluwaga</a></span><span>X: <a href="https://x.com/oluwaga_ayomide">@oluwaga_ayomide</a> · GitHub: <a href="https://github.com/OluwagaAy">OluwagaAy</a></span></div>
+    </div>
+  </div>
+</div></section>
+
+<footer><div class="wrap"><span>© 2026 Ayomide Oluwaga · Lagos, Nigeria</span><span>Cybersecurity · AI · Governance · Cloud</span></div></footer>
+
+<dialog id="dlg"><h3 id="dt"></h3><p id="dd" style="color:var(--mute);margin-top:10px"></p><ul id="dl"></ul><div class="cta" style="margin-top:18px"><button class="btn" id="dbook" type="button">Request this training</button><button class="btn ghost" id="dclose" type="button">Close</button></div></dialog>
+<div class="toast" id="toast">Copied</div>
+
+<script>
+{
+const $=s=>document.querySelector(s);
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- data ---------- */
+const trainings=[
+ {t:'Staff Cyber Awareness',k:'Cybersecurity',d:'Phishing, passwords, safe AI use and a clear "who do I call" process, so every employee becomes part of your defence.',w:'All staff, front desk to boardroom',pts:['Live phishing walkthroughs','Password and MFA habits','Safe use of AI tools at work','Incident reporting process']},
+ {t:'SOC & Incident Response Bootcamp',k:'Cybersecurity',d:'Hands-on alert triage, SIEM investigation and incident response with real tools and simulated attacks.',w:'IT and security teams',pts:['SIEM searches and dashboards','Alert triage and escalation','Threat simulation labs','Incident response playbooks']},
+ {t:'Ethical Hacking Foundations',k:'Cybersecurity',d:'Think like an attacker to defend better: scanning, vulnerability assessment and reporting in a safe lab.',w:'Technical teams and career changers',pts:['Kali Linux and Nmap','Vulnerability assessment','OWASP Top 10','Writing a findings report']},
+ {t:'CompTIA Security+ / CySA+ / SecurityX',k:'Certification prep',d:'Instructor-led exam preparation with labs, the way I deliver it for corporate teams at Philips Consulting.',w:'Professionals going for CompTIA',pts:['Domain-by-domain teaching','Hands-on labs','Practice exams','Exam-day strategy']},
+ {t:'CEH, ISC2 CC & CISSP Prep',k:'Certification prep',d:'Structured prep for the certifications employers filter for, from entry level to senior.',w:'Individuals and cohorts',pts:['ISC2 Certified in Cybersecurity','Certified Ethical Hacker','CISSP domains','Study plans and mock tests']},
+ {t:'ISACA CGEIT',k:'Governance',d:'Governance of enterprise IT, IT resources, benefits realisation and risk optimisation. Recently facilitated for Philips Consulting Limited.',w:'IT leaders, managers and auditors',pts:['Governance frameworks','Aligning IT with business goals','Benefits realisation','Risk optimisation']},
+ {t:'ISO 27001 & GRC Essentials',k:'Governance',d:'Build an information security management mindset: risk registers, controls, policies and audit readiness.',w:'Compliance, risk and IT teams',pts:['ISO/IEC 27001 structure','Risk assessment','Policies and controls','Audit preparation']},
+ {t:'AI for Productivity',k:'AI',d:'Practical prompting with Role, Task, Context, Format, and building real outputs live: research, reports, pitches.',w:'Any team that writes, plans or analyses',pts:['The RTCF prompt method','Choosing the right AI tools','Agents vs chat assistants','Live build sessions']},
+ {t:'AI Security & Governance',k:'AI',d:'Use AI without leaking data: risks, guardrails and policy for organisations adopting AI.',w:'Leaders, IT and compliance',pts:['Data leakage risks','Safe-use policies','AI governance basics','Youth and policy voice in AI']},
+ {t:'Microsoft Azure & Security Fundamentals',k:'Cloud',d:'Azure, security, compliance and identity fundamentals, with official Microsoft exam vouchers available through ImpactEra.',w:'Teams moving to the cloud',pts:['AZ-900 and SC-900 paths','Identity and access','Cloud security basics','Exam voucher options']}
+];
+const domains=[
+ {n:'Security operations',l:'SIEM & response',tools:['Splunk','Microsoft Sentinel','Microsoft Defender','Qualys','Wazuh','Wireshark','Incident response','Threat simulation'],ev:'Proof: CompTIA CySA+ and Qualys certifications; led SIEM-based training at Techstartersafrica.'},
+ {n:'Offensive security',l:'Testing',tools:['Kali Linux','Nmap','Metasploit','Nessus','Burp Suite','OWASP Top 10','Penetration testing'],ev:'Proof: pentesting modules in MAPELEAD bootcamps and the open-source Pentesting-Toolkit.'},
+ {n:'Cloud security',l:'Azure',tools:['Microsoft Azure','Azure security','Identity & access','Check Point CloudGuard','Data protection','Compliance'],ev:'Proof: Azure Solutions Architect Expert (2023), CloudGuard Technical Specialist (2025), former Microsoft Azure Certified Instructor.'},
+ {n:'Governance & risk',l:'GRC',tools:['ISACA CGEIT','ISO/IEC 27001','NIST CSF','Risk assessment','Policy design','Audit readiness'],ev:'Proof: ISO 27001 Master certification; facilitated ISACA CGEIT for Philips Consulting Limited.'},
+ {n:'Artificial intelligence',l:'AI at work',tools:['Prompt engineering','AI agents','Microsoft Copilot','AI governance','AI safety','Responsible AI'],ev:'Proof: facilitated the World Bank × Microsoft Elevate "AI for Africa\'s Future" series; Azure AI Fundamentals.'},
+ {n:'Training & facilitation',l:'CTT+',tools:['Curriculum design','Lab design','Corporate facilitation','Mentorship','Bilingual sessions','Assessment'],ev:'Proof: ICITP Certified Technical Trainer (CTT+), CompTIA Instructors Network member.'}
+];
+const roles=[
+ {w:'Oct 2025 – now',t:'Managing Partner',o:'ImpactEra',d:'Training partnerships across EMEA, including the World Bank × Microsoft Elevate AI series.',now:1},
+ {w:'Apr 2026 – now',t:'Vice President, Lagos State Branch',o:'CSEAN',d:'Leading cybersecurity advocacy, community programmes and professional standards for Lagos.',now:1},
+ {w:'Aug 2025 – now',t:'External Trainer',o:'Philips Consulting',d:'CompTIA Security+ for corporate teams, and the ISACA CGEIT course.',now:1},
+ {w:'Sep 2025 – now',t:'External Trainer',o:'Ha-Shem Limited',d:'CompTIA ITF+ training, IT labs and one-on-one coaching.',now:1},
+ {w:'Jan 2025 – now',t:'Co-Founder & CEO, Senior Cybersecurity Training Manager',o:'MAPELEAD',d:'Hands-on cybersecurity bootcamps in Lagos covering Security+, CySA+, CEH, ISC2 CC and cloud security.',now:1},
+ {w:'May 2024 – now',t:'ICITP Ambassador & Lead Trainer',o:'Institute of Chartered IT Professionals',d:'Championing IT professional standards across Africa.',now:1},
+ {w:'Jul – Aug 2026',t:'External Facilitator, Cybersecurity & AI',o:'ECOWAS Court of Justice',d:'Two 5-day batches, from top-level staff to administrative and security personnel.'},
+ {w:'Mar 2025 – Apr 2026',t:'Partner Training Facilitator',o:'Trainocate Gulf',d:'Cybersecurity modules delivered through the RESET Platform partnership.'},
+ {w:'Jul 2022 – Jan 2025',t:'Head Instructor',o:'Techstartersafrica',d:'Hands-on training with SIEM tools and threat simulations; standardised Security+, CySA+ and cloud curricula.'},
+ {w:'Dec 2022 – Jan 2024',t:'Q&A Community Champion',o:'Microsoft',d:'Moderated Microsoft technical forums across the Azure and security community.'}
+];
+const certs=[
+ ['CASP+','CompTIA Advanced Security Practitioner (SecurityX)','CompTIA · 2024'],
+ ['CySA+','CompTIA Cybersecurity Analyst','CompTIA · 2024'],
+ ['CTT+','Certified Technical Trainer','ICITP · 2024'],
+ ['ISO','ISO 27001 Master','SkillFront · 2023'],
+ ['AZ','Azure Solutions Architect Expert','Microsoft · 2023'],
+ ['CG','CloudGuard Pre-Sales Technical Specialist','Check Point · 2025'],
+ ['Q','Qualys Certified Specialist','Qualys · 2024'],
+ ['PE','Cybersecurity Foundation','PECB · 2024'],
+ ['MIP','Information Protection & Compliance Administrator','Microsoft · 2024'],
+ ['SC','Security, Compliance & Identity Fundamentals','Microsoft · 2023'],
+ ['AI','Azure AI Fundamentals','Microsoft · 2023'],
+ ['CN','CompTIA Instructors Network','Member']
+];
+const gallery=[
+ {c:'Leading a training session',big:1},
+ {c:'World Bank × Microsoft Elevate, AI for Africa\'s Future'},
+ {c:'ECOWAS Court of Justice training'},
+ {c:'CGEIT class at Philips Consulting'},
+ {c:'MAPELEAD bootcamp, lab day'},
+ {c:'Speaking with CSEAN Lagos'}
+];
+const projects=[
+ ['Tech-Jobs-Desk','Fresh IT and cybersecurity roles in Nigeria, what each one asks for, and how to apply. Updated every Monday, Wednesday and Friday.'],
+ ['Cyber-Home-Lab-Starter','Build a free cybersecurity home lab in one weekend, with 10 hands-on exercises.'],
+ ['Tech-CV-Kit','CV templates, a role-by-role keyword bank and application email templates.'],
+ ['SOC-Analyst-Training','Real-world scenarios, SIEM queries, detection rules and incident response playbooks.'],
+ ['SecurityPlus-Labs','Hands-on CompTIA Security+ labs and study resources.'],
+ ['GRC-Toolkit','Policy templates, risk assessment frameworks and audit checklists.']
+];
+
+/* ---------- hero network ---------- */
+const cv=$('#net'),cx=cv.getContext('2d');let W=0,H=0,nodes=[],pk=[],mouse={x:-999,y:-999},raf=0;
+const em=getComputedStyle(document.documentElement).getPropertyValue('--em').trim()||'#19c37d';
+function size(){const r=cv.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);W=r.width;H=r.height;cv.width=W*d;cv.height=H*d;cx.setTransform(d,0,0,d,0,0);let s=7;const rnd=()=>(s=s*16807%2147483647)/2147483647;const n=Math.round(Math.min(90,W*H/14000));nodes=Array.from({length:n},()=>({x:rnd()*W,y:rnd()*H,vx:(rnd()-.5)*.25,vy:(rnd()-.5)*.25,r:1+rnd()*2.2}));pk=[];}
+function frame(){cx.clearRect(0,0,W,H);const D=140;
+ for(const a of nodes){a.x+=a.vx;a.y+=a.vy;if(a.x<0||a.x>W)a.vx*=-1;if(a.y<0||a.y>H)a.vy*=-1;const dx=mouse.x-a.x,dy=mouse.y-a.y,dd=Math.hypot(dx,dy);if(dd<160){a.x+=dx*.004;a.y+=dy*.004;}}
+ for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){const a=nodes[i],b=nodes[j],d=Math.hypot(a.x-b.x,a.y-b.y);if(d<D){cx.strokeStyle=`rgba(25,195,125,${(1-d/D)*.28})`;cx.lineWidth=1;cx.beginPath();cx.moveTo(a.x,a.y);cx.lineTo(b.x,b.y);cx.stroke();if(Math.random()<.0009&&pk.length<40)pk.push({a,b,t:0,alert:Math.random()<.12});}}
+ for(const a of nodes){cx.fillStyle='rgba(123,232,184,.85)';cx.beginPath();cx.arc(a.x,a.y,a.r,0,7);cx.fill();}
+ pk=pk.filter(p=>(p.t+=.012)<1);for(const p of pk){const x=p.a.x+(p.b.x-p.a.x)*p.t,y=p.a.y+(p.b.y-p.a.y)*p.t;cx.fillStyle=p.alert?'#ff6b5a':em;cx.beginPath();cx.arc(x,y,p.alert?3.2:2.4,0,7);cx.fill();}
+ raf=requestAnimationFrame(frame);}
+size();const heroRO=new ResizeObserver(()=>{size();if(reduce)frame1();});heroRO.observe(cv);
+function frame1(){cancelAnimationFrame(raf);frame();cancelAnimationFrame(raf);}
+cv.parentElement.addEventListener('pointermove',e=>{const r=cv.getBoundingClientRect();mouse={x:e.clientX-r.left,y:e.clientY-r.top};});
+cv.parentElement.addEventListener('pointerleave',()=>mouse={x:-999,y:-999});
+if(reduce)frame1();else frame();
+
+/* rotating role */
+const rlist=['Cybersecurity & AI Trainer','Co-Founder & CEO, MAPELEAD','Managing Partner, ImpactEra','VP, CSEAN Lagos State Branch','ISACA CGEIT Facilitator','CompTIA Instructor Network member'];
+let ri=0;const rot=$('#rot');
+if(!reduce){setInterval(()=>{ri=(ri+1)%rlist.length;let s=rlist[ri],i=0;rot.textContent='';const iv=setInterval(()=>{rot.textContent=s.slice(0,++i);if(i>=s.length)clearInterval(iv);},35);},3200);}
+
+/* counters */
+const counted=new Set();const cio=new IntersectionObserver(es=>{for(const e of es){if(!e.isIntersecting||counted.has(e.target))continue;counted.add(e.target);const el=e.target,n=+el.dataset.count,sfx=el.dataset.suffix||'';if(reduce){el.textContent=n+sfx;continue;}let t0=null;const step=ts=>{t0??=ts;const p=Math.min(1,(ts-t0)/1200);el.textContent=Math.round(n*(1-(1-p)**3))+sfx;if(p<1)requestAnimationFrame(step);};requestAnimationFrame(step);}},{threshold:.4});
+document.querySelectorAll('[data-count]').forEach(el=>{el.textContent=el.dataset.count+(el.dataset.suffix||'');cio.observe(el);el.textContent='0';});
+
+/* trainings */
+const cats=['All',...new Set(trainings.map(t=>t.k))];let cat='All';
+function renderT(){$('#tabs').innerHTML=cats.map(c=>`<button class="tab" type="button" aria-pressed="${c===cat}" data-c="${c}">${c}</button>`).join('');
+ $('#tcards').innerHTML=trainings.map((t,i)=>({t,i})).filter(o=>cat==='All'||o.t.k===cat).map(({t,i})=>`<article class="card"><span class="tag">${t.k}</span><h3>${t.t}</h3><p>${t.d}</p><button type="button" data-i="${i}">See what's covered →</button><div class="who">For: ${t.w}</div></article>`).join('');}
+$('#tabs').addEventListener('click',e=>{const b=e.target.closest('[data-c]');if(b){cat=b.dataset.c;renderT();}});
+let picked=0;const dlg=$('#dlg');
+$('#tcards').addEventListener('click',e=>{const b=e.target.closest('[data-i]');if(!b)return;picked=+b.dataset.i;const t=trainings[picked];$('#dt').textContent=t.t;$('#dd').textContent=t.d+' Formats: on-site, virtual or hybrid.';$('#dl').innerHTML=t.pts.map(p=>`<li>${p}</li>`).join('');dlg.showModal();});
+$('#dclose').addEventListener('click',()=>dlg.close());
+$('#dbook').addEventListener('click',()=>{$('#rtopic').value=trainings[picked].t;buildReq();dlg.close();location.hash='contact';});
+renderT();
+
+/* skills constellation */
+let di=0;const sv=$('#skillsvg'),sf=$('#skillfig');
+function renderDomains(){$('#domains').innerHTML=domains.map((d,i)=>`<button class="dom" type="button" aria-pressed="${i===di}" data-d="${i}">${d.n}<small>${d.tools.length} tools · ${d.l}</small></button>`).join('');$('#evidence').textContent=domains[di].ev;drawSkills();}
+function drawSkills(){const W=sf.clientWidth,H=sf.clientHeight,cxm=W/2,cym=H/2,d=domains[di],n=d.tools.length,R=Math.min(W*.34,H*.36);
+ const pts=d.tools.map((t,i)=>{const a=-Math.PI/2+i*2*Math.PI/n;return{t,x:cxm+Math.cos(a)*R,y:cym+Math.sin(a)*R,a};});
+ const rings=[.45,.75,1].map(k=>`<circle cx="${cxm}" cy="${cym}" r="${R*k}" fill="none" stroke="var(--line)" stroke-dasharray="3 6"/>`).join('');
+ const lines=pts.map(p=>`<line x1="${cxm}" y1="${cym}" x2="${p.x}" y2="${p.y}" stroke="var(--em)" stroke-opacity=".45"/>`).join('');
+ const dots=pts.map(p=>{const right=Math.cos(p.a)>.2,left=Math.cos(p.a)<-.2,anc=right?'start':left?'end':'middle',dx=right?12:left?-12:0,dy=Math.sin(p.a)>.5?24:Math.sin(p.a)<-.5?-14:5;const lab=W<420&&p.t.length>14?p.t.slice(0,13)+'…':p.t;return `<circle cx="${p.x}" cy="${p.y}" r="7" fill="var(--em2)"><animate attributeName="r" values="6;8;6" dur="${2+((p.x|0)%5)/3}s" repeatCount="indefinite"/></circle><text x="${p.x+dx}" y="${p.y+dy}" text-anchor="${anc}">${lab}</text>`;}).join('');
+ sv.innerHTML=rings+lines+`<circle cx="${cxm}" cy="${cym}" r="${Math.min(46,R*.38)}" fill="var(--em)"/><text x="${cxm}" y="${cym+5}" text-anchor="middle" style="fill:#04140d;stroke:none;font:700 14px Sora">${d.l}</text>`+dots;}
+$('#domains').addEventListener('click',e=>{const b=e.target.closest('[data-d]');if(b){di=+b.dataset.d;renderDomains();}});
+const skRO=new ResizeObserver(drawSkills);skRO.observe(sf);renderDomains();
+
+/* terminal */
+const out=$('#out'),tin=$('#tin');
+const cmds={
+ help:()=>'Commands: whoami, trainings, certs, clients, skills, book, socials, clear\nTry also: sudo hire-me',
+ whoami:()=>'Ayomide Oluwaga (Coach A.Y.)\nCybersecurity & AI Trainer · Co-Founder & CEO, MAPELEAD\nManaging Partner, ImpactEra · VP, CSEAN Lagos State Branch\nBased in Lagos, Nigeria. Training across Africa.',
+ trainings:()=>trainings.map(t=>'• '+t.t+'  ['+t.k+']').join('\n'),
+ certs:()=>certs.map(c=>'✔ '+c[1]+' ('+c[2]+')').join('\n'),
+ clients:()=>'Philips Consulting · Trainocate Gulf · ECOWAS Court of Justice\nWorld Bank × Microsoft Elevate (via ImpactEra) · Ha-Shem Limited · ICITP',
+ skills:()=>domains.map(d=>d.n+': '+d.tools.slice(0,4).join(', ')).join('\n'),
+ socials:()=>'LinkedIn  linkedin.com/in/ayomideoluwaga\nX         @oluwaga_ayomide\nGitHub    github.com/OluwagaAy\nEmail     oluwagaayomide1@gmail.com',
+ book:()=>{setTimeout(()=>location.hash='contact',600);return 'Opening the booking form…';},
+ 'sudo hire-me':()=>'[sudo] access granted ✔\nScanning for a great trainer… 1 match found.\nRun "book" to continue.',
+ ls:()=>'trainings/  certs/  journey.log  contact.txt'
+};
+function print(html){out.insertAdjacentHTML('beforeend',html+'\n');out.scrollTop=out.scrollHeight;}
+const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+function run(c){c=c.trim().toLowerCase();if(!c)return;print(`<span class="p">$</span> ${esc(c)}`);if(c==='clear'){out.innerHTML='';return;}const f=cmds[c];print(f?esc(f()):`<span class="c">command not found: ${esc(c)}</span> (type help)`);}
+$('#tf').addEventListener('submit',e=>{e.preventDefault();run(tin.value);tin.value='';});
+$('#chips').innerHTML=['whoami','trainings','certs','clients','socials','sudo hire-me'].map(c=>`<button type="button" data-k="${c}">${c}</button>`).join('');
+$('#chips').addEventListener('click',e=>{const b=e.target.closest('[data-k]');if(b)run(b.dataset.k);});
+print('<span class="p">coach-ay console v1.0</span> · type <b>help</b> to begin');run('whoami');
+
+/* timeline */
+const half=Math.ceil(roles.length/2);
+const li=r=>`<li class="${r.now?'now':''}"><span class="when">${r.w}</span><h3>${r.t}</h3><p><b style="color:var(--ink)">${r.o}</b> · ${r.d}</p></li>`;
+$('#tl1').innerHTML=roles.slice(0,half).map(li).join('');$('#tl2').innerHTML=roles.slice(half).map(li).join('');
+
+/* certs */
+$('#certlist').innerHTML=certs.map(c=>`<div class="cert"><span class="ic">${c[0]}</span><div><b>${c[1]}</b><span>${c[2]}</span></div></div>`).join('');
+
+/* gallery */
+const cam='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="6" width="18" height="14" rx="2"/><circle cx="12" cy="13" r="4"/><path d="M8 6l2-3h4l2 3"/></svg>';
+$('#gal').innerHTML=gallery.map(g=>`<div class="slot ${g.big?'big':''}"><div>${cam}${g.c}<br><small>Photo goes here</small></div></div>`).join('');
+
+/* projects */
+$('#projs').innerHTML=projects.map(p=>`<a class="card" href="https://github.com/OluwagaAy/${p[0]}"><span class="tag">GitHub</span><h3>${p[0].replace(/-/g,' ')}</h3><p>${p[1]}</p><div class="who">github.com/OluwagaAy/${p[0]}</div></a>`).join('');
+
+/* request builder */
+$('#rtopic').innerHTML=trainings.map(t=>`<option>${t.t}</option>`).join('')+'<option>Something custom</option>';
+function buildReq(){const org=$('#rorg').value.trim()||'our organisation',when=$('#rwhen').value.trim(),note=$('#rnote').value.trim();
+ $('#rout').textContent=`Hello Ayomide,\n\nI'd like to request a ${$('#rtopic').value} training for ${org}.\n\nTeam size: ${$('#rsize').value}\nFormat: ${$('#rfmt').value}${when?`\nPreferred timing: ${when}`:''}${note?`\n\nNotes: ${note}`:''}\n\nPlease share your availability and a proposal.\n\nThank you.`;}
+$('#req').addEventListener('input',buildReq);$('#req').addEventListener('submit',e=>e.preventDefault());buildReq();
+const toast=$('#toast');
+$('#copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText($('#rout').textContent);toast.textContent='Copied. Paste it into an email or LinkedIn message.';}catch(e){toast.textContent='Select the text above and copy it.';}toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),2600);});
+}
+</script>
+</body>
+</html>
