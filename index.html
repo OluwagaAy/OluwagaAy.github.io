@@ -179,6 +179,7 @@ dialog ul{color:var(--mute);padding-left:20px}
   <div class="head"><div><h2>Trainings I deliver</h2><p class="lead">Private and corporate programmes, on-site in Lagos, across Africa, or virtual. Pick a track to see what I run.</p></div></div>
   <div class="tabs" role="group" aria-label="Filter trainings" id="tabs"></div>
   <div class="grid" id="tcards"></div>
+  <p class="lead" style="margin-top:22px">Need something not listed here? <a href="#contact" id="reqother" style="color:var(--em);font-weight:600">Request a different training →</a></p>
 </div></section>
 
 <section class="band" id="skills"><div class="wrap">
@@ -229,11 +230,13 @@ dialog ul{color:var(--mute);padding-left:20px}
 
 <section class="band" id="contact"><div class="wrap">
   <h2>Book a training</h2>
-  <p class="lead">Tell me what your team needs. Your request is written for you on the right, ready to copy and send.</p>
+  <p class="lead">Tell me what your team needs. Your request is written for you on the right, ready to send.</p>
+  <p class="lead" style="margin-top:8px"><strong style="color:var(--em)">Don't see the training you need?</strong> I deliver more than what's listed here. Choose "Request a training not listed", describe it, and I'll let you know if I can take it.</p>
   <div class="contact">
     <form class="req" id="req">
       <label for="rorg">Organisation<input id="rorg" placeholder="e.g. Acme Bank"></label>
       <label for="rtopic">Training<select id="rtopic"></select></label>
+      <label for="rcustom" id="rcustomWrap" hidden>Which training do you need?<input id="rcustom" placeholder="e.g. Cloud security for our DevOps team, CISA prep, data privacy (NDPA)"></label>
       <div class="row2">
         <label for="rsize">Team size<select id="rsize"><option>1 to 10</option><option selected>11 to 25</option><option>26 to 50</option><option>50+</option></select></label>
         <label for="rfmt">Format<select id="rfmt"><option>On-site (Lagos)</option><option>On-site (elsewhere)</option><option selected>Virtual</option><option>Hybrid</option></select></label>
@@ -243,7 +246,7 @@ dialog ul{color:var(--mute);padding-left:20px}
     </form>
     <div class="msg">
       <pre id="rout"></pre>
-      <div class="cta" style="margin-top:0"><button class="btn" id="copy" type="button">Copy request</button><a class="btn ghost" href="https://www.linkedin.com/in/ayomideoluwaga/">Message on LinkedIn</a></div>
+      <div class="cta" style="margin-top:0"><a class="btn" id="wa" href="https://wa.me/2349068242898" target="_blank" rel="noopener">Send on WhatsApp</a><a class="btn ghost" id="mail" href="mailto:oluwagaayomide1@gmail.com">Send by email</a><button class="btn ghost" id="copy" type="button">Copy</button><a class="btn ghost" href="https://www.linkedin.com/in/ayomideoluwaga/">Message on LinkedIn</a></div>
       <div class="reach"><span>Email: <a href="mailto:oluwagaayomide1@gmail.com">oluwagaayomide1@gmail.com</a></span><span>LinkedIn: <a href="https://www.linkedin.com/in/ayomideoluwaga/">linkedin.com/in/ayomideoluwaga</a></span><span>X: <a href="https://x.com/oluwaga_ayomide">@oluwaga_ayomide</a> · GitHub: <a href="https://github.com/OluwagaAy">OluwagaAy</a></span></div>
     </div>
   </div>
@@ -409,11 +412,16 @@ $('#gal').innerHTML=gallery.map(g=>`<div class="slot ${g.big?'big':''}"><div>${c
 $('#projs').innerHTML=projects.map(p=>`<a class="card" href="https://github.com/OluwagaAy/${p[0]}"><span class="tag">GitHub</span><h3>${p[0].replace(/-/g,' ')}</h3><p>${p[1]}</p><div class="who">github.com/OluwagaAy/${p[0]}</div></a>`).join('');
 
 /* request builder */
-$('#rtopic').innerHTML=trainings.map(t=>`<option>${t.t}</option>`).join('')+'<option>Something custom</option>';
-function buildReq(){const org=$('#rorg').value.trim()||'our organisation',when=$('#rwhen').value.trim(),note=$('#rnote').value.trim();
- $('#rout').textContent=`Hello Ayomide,\n\nI'd like to request a ${$('#rtopic').value} training for ${org}.\n\nTeam size: ${$('#rsize').value}\nFormat: ${$('#rfmt').value}${when?`\nPreferred timing: ${when}`:''}${note?`\n\nNotes: ${note}`:''}\n\nPlease share your availability and a proposal.\n\nThank you.`;}
+$('#rtopic').innerHTML=trainings.map(t=>`<option>${t.t}</option>`).join('')+'<option value="__custom">Request a training not listed</option>';
+const syncCustom=()=>{$('#rcustomWrap').hidden=$('#rtopic').value!=='__custom';};
+function buildReq(){syncCustom();const org=$('#rorg').value.trim()||'our organisation',when=$('#rwhen').value.trim(),note=$('#rnote').value.trim();
+ const custom=$('#rcustom').value.trim(); const topic=$('#rtopic').value==='__custom'?(custom?`"${custom}"`:'custom (not listed on your site)'):$('#rtopic').value;
+ $('#rout').textContent=`Hello Ayomide,\n\nI'd like to request a ${topic} training for ${org}.\n\nTeam size: ${$('#rsize').value}\nFormat: ${$('#rfmt').value}${when?`\nPreferred timing: ${when}`:''}${note?`\n\nNotes: ${note}`:''}\n\nPlease share your availability and a proposal.\n\nThank you.`;
+ const txt=$('#rout').textContent; $('#wa').href='https://wa.me/2349068242898?text='+encodeURIComponent(txt);
+ $('#mail').href='mailto:oluwagaayomide1@gmail.com?subject='+encodeURIComponent('Training request: '+($('#rtopic').value==='__custom'?(custom||'custom training'):$('#rtopic').value))+'&body='+encodeURIComponent(txt);}
 $('#req').addEventListener('input',buildReq);$('#req').addEventListener('submit',e=>e.preventDefault());buildReq();
 const toast=$('#toast');
+$('#reqother').addEventListener('click',()=>{$('#rtopic').value='__custom';buildReq();setTimeout(()=>$('#rcustom').focus(),400);});
 $('#copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText($('#rout').textContent);toast.textContent='Copied. Paste it into an email or LinkedIn message.';}catch(e){toast.textContent='Select the text above and copy it.';}toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),2600);});
 }
 </script>
