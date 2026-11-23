@@ -116,7 +116,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
     <li><b>Review the match</b>: see which skills the employer wants that your CV already shows, and tick any missing ones you <u>truly</u> have.</li>
     <li><b>Download your tailored CV</b> as PDF. Click anywhere on the preview to edit before you download. Then apply exactly how the job says.</li>
   </ol>
-  <p class="note">🔒 Your CV never leaves your phone or laptop. Nothing is uploaded or stored on any server. It's saved only in this browser so you don't have to re-enter it next time.</p>
+  <p class="note">🔒 Your CV stays in this browser on your phone or laptop. It's only stored online if you switch on <b>"Save my CV to my account"</b>. Your account details are kept private by MAPELEAD and never shared with other students. See the privacy notice at the bottom of the page.</p>
 </section>
 
 <!-- STEP 1 -->
@@ -596,5 +596,8 @@ $("emailBtn").onclick=e=>copy(MATCH.emailTxt,e.target);
   loadJobs();
 })();
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script src="auth.js"></script>
 </body>
 </html>
