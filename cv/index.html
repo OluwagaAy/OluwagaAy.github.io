@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CV Tailor · MAPELEAD × Coach AY</title>
+<meta name="description" content="Free tool for MAPELEAD students: put in your CV, pick a job from Coach AY's latest jobs drop, and get a CV tailored to that job in seconds.">
+<style>
+:root{
+  --bg:#f6f7fb; --card:#fff; --ink:#14213d; --muted:#5b6478; --line:#e3e6ef;
+  --brand:#0b5cff; --brand-2:#0a47c4; --ok:#0f9d58; --warn:#d97706; --bad:#d93025;
+  --chip:#eef3ff; --chip-ok:#e6f6ee; --chip-miss:#fff4e5;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+a{color:var(--brand)}
+.wrap{max-width:980px;margin:0 auto;padding:16px}
+header.top{background:linear-gradient(135deg,#0b5cff,#14213d);color:#fff}
+header.top .wrap{padding:28px 16px 24px}
+header.top h1{margin:0 0 6px;font-size:28px;line-height:1.2}
+header.top p{margin:0;opacity:.92;max-width:680px}
+.badge{display:inline-block;background:rgba(255,255,255,.16);border-radius:999px;padding:3px 10px;font-size:13px;margin-bottom:10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin:16px 0;box-shadow:0 1px 2px rgba(20,33,61,.04)}
+.card h2{margin:0 0 4px;font-size:20px;display:flex;align-items:center;gap:10px}
+.step{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--brand);color:#fff;font-size:15px;flex:none}
+.sub{color:var(--muted);margin:0 0 14px;font-size:15px}
+.howto ol{margin:6px 0 0;padding-left:20px}
+.howto li{margin:4px 0}
+label{font-weight:600;font-size:14px;display:block;margin:10px 0 4px}
+input[type=text],input[type=email],textarea,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font:inherit;background:#fff;color:inherit}
+textarea{min-height:120px;resize:vertical}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:640px){.row{grid-template-columns:1fr} header.top h1{font-size:23px}}
+.btn{appearance:none;border:0;background:var(--brand);color:#fff;font:inherit;font-weight:600;padding:11px 16px;border-radius:10px;cursor:pointer}
+.btn:hover{background:var(--brand-2)}
+.btn.ghost{background:#fff;color:var(--brand);border:1px solid var(--brand)}
+.btn.small{padding:7px 12px;font-size:14px}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.drop{border:2px dashed #b9c6ea;border-radius:12px;padding:18px;text-align:center;background:#f9fbff;cursor:pointer}
+.drop.over{background:#eef3ff;border-color:var(--brand)}
+.or{text-align:center;color:var(--muted);margin:10px 0;font-size:14px}
+.note{font-size:14px;color:var(--muted)}
+.ok{color:var(--ok)} .warn{color:var(--warn)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.chip{background:var(--chip);border-radius:999px;padding:3px 10px;font-size:14px}
+.chip.ok{background:var(--chip-ok);color:#0b6b3c}
+.chip.miss{background:var(--chip-miss);color:#8a4b00}
+.miss-list label{display:flex;gap:8px;align-items:center;font-weight:500;margin:4px 0}
+.score{display:flex;align-items:center;gap:14px;margin:8px 0 4px}
+.meter{flex:1;height:12px;background:#edf0f6;border-radius:999px;overflow:hidden}
+.meter>i{display:block;height:100%;background:var(--ok);width:0;transition:width .5s}
+.scorenum{font-weight:800;font-size:26px;min-width:64px}
+.jobbox{background:#f9fbff;border:1px solid var(--line);border-radius:10px;padding:12px;margin-top:10px;font-size:15px}
+.jobbox b{display:block}
+.hidden{display:none!important}
+.tips li{margin:4px 0}
+/* CV preview */
+#cv{background:#fff;color:#111;border:1px solid var(--line);border-radius:6px;padding:34px 38px;font:14px/1.45 Calibri,"Segoe UI",Arial,sans-serif;max-width:800px;margin:12px auto}
+#cv h1{font-size:24px;margin:0;letter-spacing:.5px}
+#cv .hl{font-weight:600;color:#0a3a8c;margin:2px 0}
+#cv .ct{color:#333;font-size:13px;margin-bottom:6px}
+#cv h3{font-size:13px;letter-spacing:1.2px;text-transform:uppercase;border-bottom:1.5px solid #0a3a8c;color:#0a3a8c;margin:14px 0 6px;padding-bottom:2px}
+#cv ul{margin:4px 0 6px 18px;padding:0}
+#cv li{margin:2px 0}
+#cv p{margin:3px 0}
+#cv .job{font-weight:600;margin-top:6px}
+#cv [contenteditable]:focus{outline:2px dashed #9db8ff;outline-offset:2px}
+.edit-hint{font-size:13px;color:var(--muted);text-align:center}
+footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40px}
+@media print{
+  body{background:#fff}
+  body *{visibility:hidden}
+  #cv,#cv *{visibility:visible}
+  #cv{position:absolute;left:0;top:0;border:0;margin:0;padding:0;max-width:none;width:100%}
+  @page{margin:14mm}
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <span class="badge">Free for MAPELEAD students · by Coach AY</span>
+  <h1>CV Tailor: one CV, fitted to every job</h1>
+  <p>Put in your CV once. Pick a job from Coach AY's latest jobs drop. Get a CV rebuilt for that exact job, ready to save as PDF and send.</p>
+</div></header>
+
+<main class="wrap">
+
+<section class="card howto">
+  <h2>How to use it (2 minutes)</h2>
+  <ol>
+    <li><b>Add your CV</b>: upload your PDF or Word file, or paste the text. Check the boxes it fills in and fix anything that looks off.</li>
+    <li><b>Pick a job</b> from the latest jobs drop, or paste any job ad you found.</li>
+    <li><b>Review the match</b>: see which skills the employer wants that your CV already shows, and tick any missing ones you <u>truly</u> have.</li>
+    <li><b>Download your tailored CV</b> as PDF. Click anywhere on the preview to edit before you download. Then apply exactly how the job says.</li>
+  </ol>
+  <p class="note">🔒 Your CV never leaves your phone or laptop. Nothing is uploaded or stored on any server. It's saved only in this browser so you don't have to re-enter it next time.</p>
+</section>
+
+<!-- STEP 1 -->
+<section class="card" id="s1">
+  <h2><span class="step">1</span> Add your CV</h2>
+  <p class="sub">PDF, Word (.docx) or plain text. Already used this before? Your CV is loaded below.</p>
+  <div class="drop" id="drop" tabindex="0" role="button" aria-label="Upload your CV file">
+    <b>📄 Tap to upload your CV</b><br><span class="note">or drag and drop it here (PDF / DOCX / TXT)</span>
+    <input type="file" id="file" accept=".pdf,.docx,.txt" class="hidden">
+  </div>
+  <div class="or">or paste it</div>
+  <textarea id="raw" placeholder="Paste your whole CV here…"></textarea>
+  <div class="btns"><button class="btn" id="parseBtn">Read my CV</button><span class="note" id="parseMsg"></span></div>
+
+  <div id="fields" class="hidden">
+    <hr style="border:0;border-top:1px solid var(--line);margin:18px 0">
+    <p class="sub"><b>Check these boxes.</b> We split your CV into sections. Fix anything that landed in the wrong place.</p>
+    <div class="row">
+      <div><label for="f_name">Full name</label><input type="text" id="f_name"></div>
+      <div><label for="f_contact">Contact line (location · phone · email · LinkedIn)</label><input type="text" id="f_contact"></div>
+    </div>
+    <label for="f_summary">Profile / summary</label><textarea id="f_summary" style="min-height:80px"></textarea>
+    <label for="f_skills">Skills &amp; tools (comma separated)</label><textarea id="f_skills" style="min-height:70px"></textarea>
+    <label for="f_certs">Certifications (one per line)</label><textarea id="f_certs" style="min-height:60px"></textarea>
+    <label for="f_exp">Work experience (job title line, then one bullet per line starting with "-")</label><textarea id="f_exp" style="min-height:150px"></textarea>
+    <label for="f_proj">Projects / home lab (one per line)</label><textarea id="f_proj" style="min-height:80px"></textarea>
+    <label for="f_edu">Education (one per line)</label><textarea id="f_edu" style="min-height:60px"></textarea>
+    <div class="btns"><button class="btn" id="saveBtn">Save &amp; go to step 2 →</button><button class="btn ghost small" id="clearBtn">Start over</button></div>
+  </div>
+</section>
+
+<!-- STEP 2 -->
+<section class="card" id="s2">
+  <h2><span class="step">2</span> Pick the job</h2>
+  <p class="sub" id="dropInfo">Loading Coach AY's latest jobs…</p>
+  <label for="jobSel">Job from the latest drops</label>
+  <select id="jobSel"><option value="">Loading…</option></select>
+  <div class="or">or</div>
+  <label for="jobPaste">Paste any other job ad (title on the first line)</label>
+  <textarea id="jobPaste" style="min-height:90px" placeholder="e.g. IT Support Officer&#10;We need someone with Windows, Microsoft 365, Active Directory, CompTIA A+…"></textarea>
+  <div id="jobBox" class="jobbox hidden"></div>
+  <div class="btns"><button class="btn" id="tailorBtn">Tailor my CV for this job →</button></div>
+</section>
+
+<!-- STEP 3 -->
+<section class="card hidden" id="s3">
+  <h2><span class="step">3</span> Your match</h2>
+  <div class="score"><div class="scorenum" id="scoreNum">0%</div><div class="meter"><i id="scoreBar"></i></div></div>
+  <p class="note" id="scoreTxt"></p>
+  <div><b class="ok">✔ Already on your CV</b><div class="chips" id="have"></div></div>
+  <div id="missWrap"><b class="warn">✚ The job asks for these. Tick only the ones you have really used (lab, class or work):</b>
+    <div class="miss-list" id="miss"></div>
+    <p class="note">Don't tick what you can't talk about in an interview. For the rest, they're your study list. Add them to your home lab and your next CV will show them.</p>
+  </div>
+  <div class="btns"><button class="btn" id="buildBtn">Build my tailored CV →</button></div>
+</section>
+
+<!-- STEP 4 -->
+<section class="card hidden" id="s4">
+  <h2><span class="step">4</span> Your tailored CV</h2>
+  <p class="sub">Click any text on the CV to edit it. Then download.</p>
+  <div class="btns">
+    <button class="btn" id="pdfBtn">⬇ Download PDF</button>
+    <button class="btn ghost" id="copyBtn">Copy as text</button>
+    <button class="btn ghost" id="emailBtn">Copy application email</button>
+  </div>
+  <p class="note" id="pdfHint">On the print screen choose <b>"Save as PDF"</b> as the printer. File name to use: <b id="fname"></b></p>
+  <div id="cv"></div>
+  <p class="edit-hint">✏️ Tap any line above to edit it.</p>
+  <div class="jobbox" id="applyBox"></div>
+  <div class="card" style="margin-top:14px">
+    <b>Before you hit send</b>
+    <ul class="tips" id="tips"></ul>
+  </div>
+</section>
+
+</main>
+<footer>
+  Built for MAPELEAD students by Coach AY (Ayomide Oluwaga) · Jobs from <a href="https://github.com/OluwagaAy/Tech-Jobs-Desk">Tech Jobs Desk</a> · CV samples in <a href="https://github.com/OluwagaAy/Tech-CV-Kit">Tech CV Kit</a> · Home lab guide: <a href="https://github.com/OluwagaAy/Cyber-Home-Lab-Starter">Cyber Home Lab Starter</a><br>
+  Want Coach AY to review your CV? Send it to him privately on WhatsApp.
+</footer>
+
+<script>
+"use strict";
+/* ---------- keyword library: [canonical, category, regex sources...] ---------- */
+const KW = [
+ // SIEM / SOC
+ ["Splunk","tool","splunk"],["Microsoft Sentinel","tool","sentinel"],["QRadar","tool","qradar"],["ArcSight","tool","arcsight"],["Wazuh","tool","wazuh"],["Elastic / ELK","tool","elastic(search)?\\b","\\belk\\b","kibana"],["SIEM","skill","\\bsiem\\b"],["EDR","skill","\\bedr\\b","endpoint detection"],["CrowdStrike","tool","crowdstrike","falcon"],["Microsoft Defender","tool","defender"],["IDS/IPS","skill","\\bids\\b","\\bips\\b","intrusion (detection|prevention)","hips","nips","snort","suricata"],["Incident response","skill","incident response","incident handling","\\bir\\b"],["Threat hunting","skill","threat hunt"],["Threat intelligence","skill","threat intel"],["Log analysis","skill","log(s)? (analysis|review)","reading (auth|web|cloud|server)? ?logs","\\blogs?\\b"],["Alert triage","skill","triag","alert monitor"],["Forensics","skill","forensic"],["MITRE ATT&CK","framework","mitre","att&ck","attack framework"],["Packet analysis","skill","packet (analysis|capture)","pcap"],["Wireshark","tool","wireshark"],["Sigma / YARA rules","skill","\\bsigma\\b","\\byara\\b"],
+ // Offensive
+ ["Penetration testing","skill","pen(etration)? ?test","pentest","ethical hack"],["Vulnerability management","skill","vulnerabilit(y|ies) (management|assessment|scan)","\\bva\\b","vulnerability"],["Burp Suite","tool","burp"],["Nmap","tool","nmap"],["Nessus","tool","nessus"],["Metasploit","tool","metasploit"],["Kali Linux","tool","kali"],["OWASP Top 10","framework","owasp"],["API security","skill","api security","apis?\\b"],["Web application security","skill","web app(lication)? security","web attacks"],["Secure code review","skill","code review","secure coding"],["SAST/DAST","skill","\\bsast\\b","\\bdast\\b"],["Threat modelling","skill","threat model"],["Phishing awareness","skill","phishing"],
+ // GRC
+ ["ISO 27001","framework","iso ?27001"],["NIST","framework","\\bnist\\b"],["PCI DSS","framework","pci"],["NDPA / NDPR","framework","ndpa","ndpr","data protection"],["GDPR","framework","gdpr"],["SOC 2","framework","soc ?2\\b"],["Risk assessment","skill","risk (assessment|management)"],["Security audits","skill","audit"],["Security policies","skill","polic(y|ies)"],["Security awareness training","skill","awareness"],["CBN guidelines","framework","\\bcbn\\b"],["ITIL","cert","\\bitil\\b"],
+ // Cloud / DevOps
+ ["AWS","tool","\\baws\\b","amazon web services","ec2","\\bs3\\b","\\bvpc\\b","cloudwatch","cloudtrail","route 53","\\biam\\b"],["Microsoft Azure","tool","azure"],["Google Cloud","tool","\\bgcp\\b","google cloud"],["DigitalOcean","tool","digitalocean","digital ocean"],["Oracle Cloud (OCI)","tool","\\boci\\b"],["Terraform","tool","terraform"],["CloudFormation","tool","cloudformation"],["Infrastructure as Code","skill","infrastructure as code","\\biac\\b"],["Docker","tool","docker","container"],["Kubernetes","tool","kubernetes","\\bk8s\\b"],["CI/CD","skill","ci/cd","\\bci\\b","pipeline","jenkins","github actions","gitlab"],["Git","tool","\\bgit\\b","github"],["Monitoring & alerting","skill","monitoring","observability","prometheus","grafana"],["Backup & disaster recovery","skill","backup","disaster recovery","business continuity"],["DevSecOps","skill","devsecops"],
+ // Systems / networking / support
+ ["Linux","tool","linux","bash","command line"],["Windows","tool","windows"],["Windows Server","tool","windows server"],["Active Directory","tool","active directory","\\bad\\b"],["Microsoft 365","tool","microsoft 365","office 365","\\bm365\\b","\\bo365\\b"],["Google Workspace","tool","google workspace","g suite"],["Networking (TCP/IP, DNS, DHCP)","skill","tcp/ip","\\bdns\\b","\\bdhcp\\b","networking","\\blan\\b","wi-?fi","routers?"],["Routing & switching","skill","routing","switching","vlan"],["Firewalls","skill","firewall"],["VPN","skill","\\bvpn\\b"],["Virtualization","skill","virtuali[sz]","vmware","virtualbox","hyper-v"],["Hardware troubleshooting","skill","hardware","printer"],["Software & OS troubleshooting","skill","troubleshoot"],["Ticketing / ServiceNow","tool","ticket","servicenow","jira","helpdesk","help desk","service desk"],["Remote support","skill","remote support"],["Patch management","skill","patch"],["Access control / IAM","skill","access control","identity and access","access management"],["Encryption","skill","encrypt"],["Excel / Google Sheets","tool","excel","google sheets"],["Power BI","tool","power bi"],["SQL","tool","\\bsql\\b"],["CCTV / access systems","skill","cctv"],["VoIP","skill","voip"],
+ // Scripting
+ ["Python","tool","python"],["PowerShell","tool","powershell"],["Bash scripting","tool","bash"],["JavaScript","tool","javascript"],
+ // Soft / other
+ ["Clear written reports","soft","report","documentation","incident notes","writing"],["Communication with non-technical users","soft","non-technical","communicat"],["AI tools for investigation","skill","\\bai\\b assistants?","ai tools","prompt injection"],["Hands-on labs (TryHackMe / CTFs)","proof","tryhackme","hack ?the ?box","letsdefend","\\bctf\\b","home lab"],
+ // Certs
+ ["CompTIA Security+","cert","security\\+","sec\\+","comptia security"],["CompTIA A+","cert","\\ba\\+"],["CompTIA Network+","cert","network\\+","net\\+"],["CompTIA CySA+","cert","cysa"],["CompTIA PenTest+","cert","pentest\\+"],["CompTIA CASP+","cert","casp"],["ISC2 CC","cert","isc2 cc","certified in cybersecurity","isc2 certified"],["CISSP","cert","cissp"],["CEH","cert","\\bceh\\b","certified ethical hacker"],["OSCP","cert","oscp"],["GIAC (GCIH/GCIA/GPEN)","cert","gcih","gcia","gpen","giac"],["Google Cybersecurity Certificate","cert","google cyber"],["Google IT Support Certificate","cert","google it support"],["BTL1","cert","btl1","blue team level"],["Cisco CyberOps","cert","cyberops"],["CCNA","cert","ccna"],["CCNP","cert","ccnp"],["AWS Solutions Architect","cert","solutions architect"],["AWS SysOps Administrator","cert","sysops"],["Azure Administrator","cert","azure administrator","az-104"],["eCPPT","cert","ecppt"],["CISA","cert","\\bcisa\\b"],["CISM","cert","\\bcism\\b"],["ISO 27001 Lead Implementer/Auditor","cert","lead (implementer|auditor)"],
+];
+const KWRX = KW.map(([name,cat,...src]) => ({name,cat,rx:new RegExp(src.join("|"),"i")}));
+const findKw = text => KWRX.filter(k => k.rx.test(text));
+
+/* ---------- helpers ---------- */
+const $ = id => document.getElementById(id);
+const esc = s => String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const store = {
+  get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+};
+const show = (id,on=true)=>$(id).classList.toggle("hidden",!on);
+function loadScript(src){return new Promise((res,rej)=>{const s=document.createElement("script");s.src=src;s.onload=res;s.onerror=()=>rej(new Error("Could not load "+src));document.head.appendChild(s);});}
+
+/* ---------- STEP 1: reading the CV ---------- */
+async function readFile(f){
+  const name=f.name.toLowerCase();
+  if(name.endsWith(".txt")) return await f.text();
+  if(name.endsWith(".docx")){
+    await loadScript("https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js");
+    const r = await window.mammoth.extractRawText({arrayBuffer: await f.arrayBuffer()});
+    return r.value;
+  }
+  if(name.endsWith(".pdf")){
+    await loadScript("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js");
+    const pdfjs = window.pdfjsLib;
+    pdfjs.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+    const doc = await pdfjs.getDocument({data: await f.arrayBuffer()}).promise;
+    let out=[];
+    for(let p=1;p<=doc.numPages;p++){
+      const tc = await (await doc.getPage(p)).getTextContent();
+      let lines=[], cur="", lastY=null;
+      for(const it of tc.items){
+        const y = Math.round(it.transform[5]);
+        if(lastY!==null && Math.abs(y-lastY)>2){ lines.push(cur); cur=""; }
+        cur += (cur && !cur.endsWith(" ") && !it.str.startsWith(" ") ? " " : "") + it.str;
+        lastY=y;
+        if(it.hasEOL){ lines.push(cur); cur=""; lastY=null; }
+      }
+      if(cur) lines.push(cur);
+      out.push(lines.join("\n"));
+    }
+    return out.join("\n");
+  }
+  throw new Error("Please upload a PDF, DOCX or TXT file.");
+}
+
+const SECTIONS = [
+  ["summary",/^(professional\s+)?(profile|summary|about me|objective|career objective|personal statement)\b/i],
+  ["skills",/^(technical\s+|core\s+|key\s+)?(skills|skills\s*(&|and)\s*tools|tools|competenc(y|ies)|technical proficienc)/i],
+  ["certs",/^(certifications?|certificates?|licen[cs]es?|professional (qualifications|certifications))\b/i],
+  ["exp",/^(work |professional |relevant )?(experience|employment( history)?|work history|career history|internships?)\b/i],
+  ["proj",/^(projects?|home ?lab|labs?|portfolio|practical experience|hands-on)\b/i],
+  ["edu",/^(education|academic|qualifications|training)\b/i],
+  ["other",/^(references?|hobbies|interests|languages|volunteer|awards|achievements|referees)\b/i],
+];
+function parseCV(text){
+  const lines = text.replace(/\r/g,"").split("\n").map(l=>l.replace(/\s+/g," ").trim()).filter(Boolean);
+  const res={name:"",contact:"",summary:[],skills:[],certs:[],exp:[],proj:[],edu:[],other:[],head:[]};
+  let cur="head";
+  for(const l of lines){
+    const bare=l.replace(/[:\-–—|•#*_]+$/,"").replace(/^[#*_\s]+/,"").trim();
+    const hit = bare.length<45 && SECTIONS.find(([,rx])=>rx.test(bare));
+    if(hit){ cur=hit[0]; const rest=l.split(/[:]/).slice(1).join(":").trim(); if(rest) res[cur].push(rest); continue; }
+    res[cur].push(l);
+  }
+  // header: name + contact
+  const head=res.head;
+  res.name = head.find(l=>!/[@\d]/.test(l) && l.split(" ").length<=5) || head[0] || "";
+  const contactBits = head.filter(l=>l!==res.name && (/@|\+?\d[\d\s-]{6,}|linkedin|github|lagos|abuja|nigeria|,/i.test(l)));
+  res.contact = contactBits.join(" · ").replace(/\s*[|•]\s*/g," · ");
+  const headline = head.filter(l=>l!==res.name && !contactBits.includes(l));
+  if(!res.summary.length && headline.length) res.summary = headline;
+  return res;
+}
+function splitSkills(arr){
+  return arr.join(", ").split(/[,;•|·]|\s{2,}|\n/).map(s=>s.replace(/^[-–*\s]+|[\s.]+$/g,"").replace(/^[A-Za-z ]{2,20}:\s*/,"")).filter(s=>s && s.length<60);
+}
+function fillFields(p){
+  $("f_name").value=p.name; $("f_contact").value=p.contact;
+  $("f_summary").value=p.summary.join(" ");
+  $("f_skills").value=[...new Set(splitSkills(p.skills))].join(", ");
+  $("f_certs").value=p.certs.join("\n");
+  $("f_exp").value=p.exp.map(l=>/^[-•*▪●◦]/.test(l)?"- "+l.replace(/^[-•*▪●◦]\s*/,""):l).join("\n");
+  $("f_proj").value=p.proj.map(l=>l.replace(/^[-•*▪●◦]\s*/,"")).join("\n");
+  $("f_edu").value=p.edu.join("\n");
+  show("fields");
+}
+function readFields(){
+  return {name:$("f_name").value.trim(),contact:$("f_contact").value.trim(),summary:$("f_summary").value.trim(),
+    skills:$("f_skills").value.split(",").map(s=>s.trim()).filter(Boolean),
+    certs:$("f_certs").value.split("\n").map(s=>s.trim()).filter(Boolean),
+    exp:$("f_exp").value, proj:$("f_proj").value.split("\n").map(s=>s.replace(/^[-•*]\s*/,"").trim()).filter(Boolean),
+    edu:$("f_edu").value.split("\n").map(s=>s.trim()).filter(Boolean)};
+}
+function parseExp(txt){ // -> [{title, bullets[]}]
+  const out=[]; let cur=null;
+  for(const raw of txt.split("\n")){ const l=raw.trim(); if(!l) continue;
+    if(/^[-•*]/.test(l)){ if(!cur){cur={title:"",bullets:[]};out.push(cur);} cur.bullets.push(l.replace(/^[-•*]\s*/,"")); }
+    else if(cur && !cur.bullets.length && cur.title && l.length<80 && !/[.!]$/.test(l)){ cur.title+=" · "+l; }
+    else if(l.length>110 && cur){ cur.bullets.push(l); }
+    else { cur={title:l,bullets:[]}; out.push(cur); }
+  }
+  return out;
+}
+
+$("drop").onclick=()=>$("file").click();
+$("drop").onkeydown=e=>{if(e.key==="Enter"||e.key===" ")$("file").click();};
+["dragover","dragenter"].forEach(ev=>$("drop").addEventListener(ev,e=>{e.preventDefault();$("drop").classList.add("over");}));
+["dragleave","drop"].forEach(ev=>$("drop").addEventListener(ev,e=>{e.preventDefault();$("drop").classList.remove("over");}));
+$("drop").addEventListener("drop",e=>{ if(e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]); });
+$("file").onchange=e=>{ if(e.target.files[0]) handleFile(e.target.files[0]); };
+async function handleFile(f){
+  $("parseMsg").textContent="Reading "+f.name+"…";
+  try{ const t=await readFile(f); $("raw").value=t; doParse(); }
+  catch(err){ $("parseMsg").innerHTML='<span class="warn">'+esc(err.message)+' Try pasting the text instead.</span>'; }
+}
+function doParse(){
+  const t=$("raw").value.trim();
+  if(t.length<80){ $("parseMsg").innerHTML='<span class="warn">That looks too short. Paste your full CV.</span>'; return; }
+  fillFields(parseCV(t));
+  $("parseMsg").innerHTML='<span class="ok">✔ Done. Check the boxes below.</span>';
+  $("fields").scrollIntoView({behavior:"smooth"});
+}
+$("parseBtn").onclick=doParse;
+$("saveBtn").onclick=()=>{ const f=readFields(); if(!f.name){alert("Please add your name.");return;} store.set("cvt_fields",f); $("s2").scrollIntoView({behavior:"smooth"}); };
+$("clearBtn").onclick=()=>{ if(!confirm("Clear your saved CV from this browser?"))return; try{localStorage.removeItem("cvt_fields")}catch(e){} location.reload(); };
+
+/* ---------- STEP 2: jobs from Tech-Jobs-Desk ---------- */
+const REPO="OluwagaAy/Tech-Jobs-Desk";
+let JOBS=[];
+function parseDrop(md,file){
+  const date=file.replace(".md","");
+  const jobs=[]; let level="", cur=null;
+  for(const raw of md.replace(/\r/g,"").split("\n")){
+    const l=raw.trim();
+    if(/^##\s/.test(l) && !/^###/.test(l)){ level=l.replace(/^##\s*/,"").replace(/^[^\w]+/,"").trim(); cur=null; continue; }
+    if(/^###\s/.test(l)){ const h=l.replace(/^###\s*/,""); const parts=h.split(","); cur={date,level,title:parts[0].trim(),company:(parts[1]||"").trim(),location:parts.slice(2).join(",").trim(),want:"",plus:"",apply:"",link:""}; jobs.push(cur); continue; }
+    if(!cur) continue;
+    const m=l.match(/^-\s*\*\*(.+?):?\*\*:?\s*(.*)$/);
+    if(m){ const k=m[1].toLowerCase(); const v=m[2];
+      if(k.startsWith("they want")) cur.want=v; else if(k.startsWith("plus")) cur.plus=v; else if(k.startsWith("apply")) cur.apply=v; }
+    const lk=l.match(/\((https?:\/\/[^)]+)\)/); if(lk && !cur.link) cur.link=lk[1];
+  }
+  return jobs.filter(j=>!/what this drop/i.test(j.level));
+}
+async function loadJobs(){
+  try{
+    const list=await (await fetch(`https://api.github.com/repos/${REPO}/contents/jobs`)).json();
+    if(!Array.isArray(list)) throw new Error("list");
+    const files=list.map(f=>f.name).filter(n=>/^\d{4}-\d{2}-\d{2}\.md$/.test(n)).sort().reverse().slice(0,3);
+    for(const fn of files){
+      const md=await (await fetch(`https://raw.githubusercontent.com/${REPO}/main/jobs/${fn}`)).text();
+      JOBS.push(...parseDrop(md,fn));
+    }
+    renderJobs(files);
+  }catch(e){
+    $("dropInfo").innerHTML='<span class="warn">Couldn\'t load the jobs list right now. Paste the job ad below instead.</span>';
+    $("jobSel").innerHTML='<option value="">(not available, paste the ad below)</option>';
+  }
+}
+function niceDate(d){ try{return new Date(d+"T12:00:00").toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short"});}catch(e){return d;} }
+function renderJobs(files){
+  const byDate={}; JOBS.forEach((j,i)=>{(byDate[j.date]=byDate[j.date]||[]).push(i);});
+  let h='<option value="">— Choose a job —</option>';
+  for(const d of Object.keys(byDate).sort().reverse()){
+    h+=`<optgroup label="Jobs drop · ${niceDate(d)}">`+byDate[d].map(i=>`<option value="${i}">${esc(JOBS[i].title)} — ${esc(JOBS[i].company)}</option>`).join("")+"</optgroup>";
+  }
+  $("jobSel").innerHTML=h;
+  $("dropInfo").innerHTML=`Showing the last ${files.length} jobs drop${files.length>1?"s":""} (latest: <b>${niceDate(files[0].replace(".md",""))}</b>). New jobs appear here every Monday, Wednesday and Friday.`;
+  const q=new URLSearchParams(location.search).get("job"); if(q){ const i=JOBS.findIndex(j=>(j.title+" "+j.company).toLowerCase().includes(q.toLowerCase())); if(i>=0){$("jobSel").value=i; showJob();} }
+}
+function currentJob(){
+  const p=$("jobPaste").value.trim();
+  if(p){ const lines=p.split("\n"); return {title:lines[0].replace(/^[#\s]+/,"").slice(0,80),company:"",location:"",want:p,plus:"",apply:"",link:"",level:""}; }
+  const v=$("jobSel").value; return v===""?null:JOBS[+v];
+}
+function showJob(){
+  const j=currentJob(); if(!j||$("jobPaste").value.trim()){show("jobBox",false);return;}
+  $("jobBox").innerHTML=`<b>${esc(j.title)} · ${esc(j.company)}${j.location?" · "+esc(j.location):""}</b><span class="note">${esc(j.level)}</span><p style="margin:6px 0 0"><b style="display:inline">They want:</b> ${esc(j.want)}</p>${j.plus?`<p style="margin:4px 0 0"><b style="display:inline">Plus:</b> ${esc(j.plus)}</p>`:""}`;
+  show("jobBox");
+}
+$("jobSel").onchange=()=>{ $("jobPaste").value=""; showJob(); };
+$("jobPaste").oninput=showJob;
+
+/* ---------- STEP 3: matching ---------- */
+let MATCH=null;
+$("tailorBtn").onclick=()=>{
+  const f=readFields(); if(!f.name){ alert("First add your CV in step 1 and press Save."); $("s1").scrollIntoView({behavior:"smooth"}); return; }
+  store.set("cvt_fields",f);
+  const j=currentJob(); if(!j){ alert("Pick a job or paste a job ad."); return; }
+  const jobText=[j.title,j.want,j.plus].join(" ");
+  const cvText=[f.summary,f.skills.join(" "),f.certs.join(" "),f.exp,f.proj.join(" "),f.edu.join(" ")].join(" ");
+  const jk=findKw(jobText).filter(k=>k.cat!=="soft");
+  const have=jk.filter(k=>k.rx.test(cvText)), miss=jk.filter(k=>!k.rx.test(cvText));
+  MATCH={job:j,jk,have,miss,f};
+  const pct=jk.length?Math.round(have.length/jk.length*100):0;
+  $("scoreNum").textContent=pct+"%"; setTimeout(()=>$("scoreBar").style.width=pct+"%",50);
+  $("scoreBar").style.background=pct>=70?"var(--ok)":pct>=40?"var(--warn)":"var(--bad)";
+  $("scoreTxt").textContent= jk.length? (pct>=70?"Strong match. Apply today.": pct>=40?"Good start. Recruiters say ~70% of the requirements is enough to apply.":"Low match for now. Apply if you can show the basics, and use the list below as your study plan.") : "We couldn't spot specific tools in this ad. Your CV will still be cleaned up and focused on the job title.";
+  $("have").innerHTML=have.map(k=>`<span class="chip ok">${esc(k.name)}</span>`).join("")||'<span class="note">None yet</span>';
+  $("miss").innerHTML=miss.map((k,i)=>`<label><input type="checkbox" value="${i}"> ${esc(k.name)}</label>`).join("");
+  show("missWrap",miss.length>0); show("s3"); show("s4",false);
+  $("s3").scrollIntoView({behavior:"smooth"});
+};
+
+/* ---------- STEP 4: build tailored CV ---------- */
+function cleanTitle(t){ return t.replace(/\(.*?\)/g,"").replace(/\b(senior|sr\.?|lead|level\s*\d|l\d|ii|iii)\b/ig,"").replace(/\s{2,}/g," ").trim(); }
+function score(text,kws){ return kws.reduce((s,k)=>s+(k.rx.test(text)?1:0),0); }
+$("buildBtn").onclick=()=>{
+  const {job,have,miss,f}=MATCH;
+  const added=[...document.querySelectorAll("#miss input:checked")].map(c=>miss[+c.value]);
+  const owned=[...have,...added];
+  const role=cleanTitle(job.title)||job.title;
+  const tools=owned.filter(k=>k.cat==="tool"||k.cat==="skill").map(k=>k.name);
+  const sumTxt=(f.summary||"");
+  const leadTools=tools.filter(t=>!KWRX.find(k=>k.name===t).rx.test(sumTxt));
+  const leadCerts=certsOwnedFn(owned).filter(c=>!KWRX.find(k=>k.name===c).rx.test(sumTxt));
+  const certsOwned=owned.filter(k=>k.cat==="cert").map(k=>k.name);
+  const isIntern=/intern|trainee|graduate|junior|entry/i.test(job.title+job.level);
+  // headline
+  const headline=[role, ...certsOwned.slice(0,1), ...tools.slice(0,3)].join(" | ");
+  // summary: targeted first line + their own best sentences
+  const lt=(leadTools.length?leadTools:tools).slice(0,4);
+  const lead=`${isIntern?"Motivated":"Hands-on"} ${/intern|trainee/i.test(role)?role:role+" candidate"}${lt.length?` with practical experience in ${listJoin(lt)}`:""}${leadCerts.length?`, holding ${listJoin(leadCerts.slice(0,2))}`:""}.`;
+  const own=(f.summary||"").split(/(?<=[.!?])\s+/).filter(s=>s.length>20 && !/^(i am|i'm)?\s*(seeking|looking for) (a|an) (challenging|position)/i.test(s));
+  own.sort((a,b)=>score(b,owned)-score(a,owned));
+  const closing=job.company?` Keen to bring this to ${job.company}.`:"";
+  const summary=(lead+" "+own.slice(0,2).join(" ")+closing).replace(/\s+/g," ").trim();
+  // skills: job-matched first
+  const matchedNames=owned.filter(k=>k.cat==="tool"||k.cat==="skill"||k.cat==="framework").map(k=>k.name);
+  const otherSkills=f.skills.filter(s=>!owned.some(k=>k.rx.test(s)));
+  const skillsLine=[...new Set([...matchedNames,...otherSkills])].slice(0,18);
+  // certs: requested first
+  const jobCertRx=MATCH.jk.filter(k=>k.cat==="cert");
+  const certs=[...f.certs].sort((a,b)=>score(b,jobCertRx)-score(a,jobCertRx));
+  added.filter(k=>k.cat==="cert" && !certs.some(c=>k.rx.test(c))).forEach(k=>certs.unshift(k.name));
+  // experience: bullets with job keywords first
+  const exp=parseExp(f.exp).map(e=>({title:e.title,bullets:[...e.bullets].sort((a,b)=>score(b,owned)-score(a,owned))}));
+  const proj=[...f.proj].sort((a,b)=>score(b,owned)-score(a,owned));
+  const projFirst = isIntern || exp.length===0 || score(proj.join(" "),owned)>score(exp.map(e=>e.bullets.join(" ")).join(" "),owned);
+  const sec=(t,body)=>body?`<h3>${t}</h3>${body}`:"";
+  const ce=s=>`<span contenteditable="true">${esc(s)}</span>`;
+  const expHtml=exp.map(e=>`${e.title?`<p class="job" contenteditable="true">${esc(e.title)}</p>`:""}${e.bullets.length?`<ul>${e.bullets.map(b=>`<li contenteditable="true">${esc(b)}</li>`).join("")}</ul>`:""}`).join("");
+  const projHtml=proj.length?`<ul>${proj.map(p=>`<li contenteditable="true">${esc(p)}</li>`).join("")}</ul>`:"";
+  $("cv").innerHTML=
+    `<h1 contenteditable="true">${esc(f.name.toUpperCase())}</h1>`+
+    `<p class="hl" contenteditable="true">${esc(headline)}</p>`+
+    (f.contact?`<p class="ct" contenteditable="true">${esc(f.contact)}</p>`:"")+
+    sec("Profile",`<p contenteditable="true">${esc(summary)}</p>`)+
+    sec("Skills &amp; Tools",skillsLine.length?`<p contenteditable="true">${esc(skillsLine.join(" · "))}</p>`:"")+
+    sec("Certifications",certs.length?`<p contenteditable="true">${esc(certs.join(" · "))}</p>`:"")+
+    (projFirst? sec("Projects &amp; Home Lab",projHtml)+sec("Experience",expHtml) : sec("Experience",expHtml)+sec("Projects &amp; Home Lab",projHtml))+
+    sec("Education",f.edu.length?`<ul>${f.edu.map(e=>`<li contenteditable="true">${esc(e)}</li>`).join("")}</ul>`:"");
+  // file name + apply box + tips
+  const parts=f.name.trim().split(/\s+/); const fn=(parts[0]||"First")+"_"+(parts.slice(-1)[0]||"Last")+"_"+role.replace(/[^A-Za-z0-9]+/g,"_").replace(/_+$/,"")+"_CV";
+  $("fname").textContent=fn+".pdf"; document.title=fn;
+  const subj=(job.apply.match(/subject\s*`([^`]+)`/i)||job.apply.match(/subject[:\s]+["“]?([^"”\n]+)/i)||[])[1];
+  const email=(job.apply.match(/[\w.+-]+@[\w-]+\.[\w.]+/g)||[]);
+  MATCH.emailTxt=`Subject: ${subj||("Application – "+job.title)}\n\nDear Hiring Team,\n\nI'm applying for the ${job.title} role${job.company?" at "+job.company:""}. My CV is attached.\n\nI have hands-on experience with ${listJoin(tools.slice(0,3))||"the core skills in your job description"}${certsOwned.length?" and hold "+certsOwned[0]:""}, and I can start immediately.\n\nThank you for your time.\n\n${f.name}\n${f.contact}`;
+  $("applyBox").innerHTML=`<b>How to apply</b>${job.apply?`<p style="margin:6px 0">${esc(job.apply).replace(/\[Indeed listing\]\((https?:[^)]+)\)/,'<a href="$1" target="_blank" rel="noopener">Indeed listing</a>')}</p>`:""}${email.length?`<p style="margin:4px 0">Email: <b>${email.map(esc).join(", ")}</b>${subj?` · Subject: <b>${esc(subj)}</b> (copy it exactly)`:""}</p>`:""}${job.link?`<p style="margin:4px 0"><a href="${esc(job.link)}" target="_blank" rel="noopener">Open the job post ↗</a></p>`:""}`;
+  const tips=[];
+  const weak=exp.flatMap(e=>e.bullets).filter(b=>!/\d/.test(b)).length;
+  if(weak) tips.push(`${weak} experience bullet${weak>1?"s have":" has"} no numbers. Add one where you can, e.g. "resolved <b>30+</b> tickets a week".`);
+  if(!proj.length) tips.push(`No projects yet. Add 1–2 home-lab projects. Free guide: <a href="https://github.com/OluwagaAy/Cyber-Home-Lab-Starter" target="_blank" rel="noopener">Cyber Home Lab Starter</a>.`);
+  if(!/linkedin/i.test(f.contact)) tips.push("Add your LinkedIn link to the contact line, and make your LinkedIn headline match the headline above.");
+  if(miss.length-added.length>0) tips.push(`Still missing: ${miss.filter(k=>!added.includes(k)).slice(0,5).map(k=>esc(k.name)).join(", ")}. That's your study list for the next 2 weeks.`);
+  tips.push("Keep it to 1–2 pages. Use the preview to cut anything that isn't relevant to <b>this</b> job.");
+  tips.push(`Name the file <b>${esc(fn)}.pdf</b> and send it as PDF, never Word.`);
+  if(email.length) tips.push("Email applications: use the exact subject line and keep the email body to 3–4 lines. Use the \"Copy application email\" button.");
+  $("tips").innerHTML=tips.map(t=>`<li>${t}</li>`).join("");
+  show("s4"); $("s4").scrollIntoView({behavior:"smooth"});
+};
+function certsOwnedFn(o){ return o.filter(k=>k.cat==="cert").map(k=>k.name); }
+function listJoin(a){ return a.length<=1?(a[0]||""):a.slice(0,-1).join(", ")+" and "+a[a.length-1]; }
+$("pdfBtn").onclick=()=>window.print();
+async function copy(t,btn){ try{await navigator.clipboard.writeText(t); const o=btn.textContent; btn.textContent="✔ Copied"; setTimeout(()=>btn.textContent=o,1500);}catch(e){prompt("Copy this:",t);} }
+$("copyBtn").onclick=e=>copy($("cv").innerText,e.target);
+$("emailBtn").onclick=e=>copy(MATCH.emailTxt,e.target);
+
+/* ---------- init ---------- */
+(function init(){
+  const saved=store.get("cvt_fields");
+  if(saved){ $("f_name").value=saved.name||""; $("f_contact").value=saved.contact||""; $("f_summary").value=saved.summary||"";
+    $("f_skills").value=(saved.skills||[]).join(", "); $("f_certs").value=(saved.certs||[]).join("\n"); $("f_exp").value=saved.exp||"";
+    $("f_proj").value=(saved.proj||[]).join("\n"); $("f_edu").value=(saved.edu||[]).join("\n"); show("fields");
+    $("parseMsg").innerHTML='<span class="ok">✔ Your saved CV is loaded. Go to step 2, or update it below.</span>'; }
+  loadJobs();
+})();
+</script>
+</body>
+</html>
