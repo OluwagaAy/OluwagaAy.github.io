@@ -106,7 +106,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
   </div>
   <div class="or">or paste it</div>
   <textarea id="raw" placeholder="Paste your whole CV here…"></textarea>
-  <div class="btns"><button class="btn" id="parseBtn">Read my CV</button><span class="note" id="parseMsg"></span></div>
+  <div class="btns"><button class="btn" id="parseBtn">Read my CV</button><button class="btn ghost small" id="sampleBtn">Just looking? Try a sample CV</button><span class="note" id="parseMsg"></span></div>
 
   <div id="fields" class="hidden">
     <hr style="border:0;border-top:1px solid var(--line);margin:18px 0">
@@ -167,12 +167,14 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
   <div class="card" style="margin-top:14px">
     <b>Before you hit send</b>
     <ul class="tips" id="tips"></ul>
+    <p class="note" style="margin:8px 0 0">📣 New jobs every Mon, Wed &amp; Fri: <a href="https://whatsapp.com/channel/0029Vb9TBjV5EjxyhC8jKi2b" target="_blank" rel="noopener">follow MAPELEAD Careers on WhatsApp</a>.</p>
   </div>
 </section>
 
 </main>
 <footer>
   Built for MAPELEAD students by Coach AY (Ayomide Oluwaga) · Jobs from <a href="https://github.com/OluwagaAy/Tech-Jobs-Desk">Tech Jobs Desk</a> · CV samples in <a href="https://github.com/OluwagaAy/Tech-CV-Kit">Tech CV Kit</a> · Home lab guide: <a href="https://github.com/OluwagaAy/Cyber-Home-Lab-Starter">Cyber Home Lab Starter</a><br>
+  Want more jobs every Monday, Wednesday and Friday? <a href="https://whatsapp.com/channel/0029Vb9TBjV5EjxyhC8jKi2b">Follow MAPELEAD Careers on WhatsApp</a>.<br>
   Want Coach AY to review your CV? Send it to him privately on WhatsApp.
 </footer>
 
@@ -321,6 +323,24 @@ function doParse(){
   $("fields").scrollIntoView({behavior:"smooth"});
 }
 $("parseBtn").onclick=doParse;
+$("sampleBtn").onclick=()=>{ $("raw").value=SAMPLE_CV; doParse(); $("parseMsg").innerHTML='<span class="ok">✔ Sample CV loaded (Tolu is not a real person). Now pick a job in step 2.</span>'; };
+const SAMPLE_CV=`Tolu Adeyemi
+Lagos, Nigeria | +234 800 000 0000 | tolu.adeyemi@email.com | linkedin.com/in/tolu-adeyemi
+PROFILE
+Cybersecurity graduate with hands-on labs in Splunk, Wireshark and Linux. Eager to start my career in a SOC.
+SKILLS
+Splunk, Wireshark, Linux, Windows, Microsoft Office, Customer service
+CERTIFICATIONS
+CompTIA Security+ (2026)
+EXPERIENCE
+Customer Service Officer — Sterling Retail, Lagos (2023–2025)
+- Handled customer complaints
+- Resolved 40+ account access issues weekly and escalated suspected fraud
+PROJECTS
+Built a home lab with VirtualBox, Kali and a Windows VM; detected Nmap scans in Splunk
+Analysed Windows event logs and mapped alerts to MITRE ATT&CK
+EDUCATION
+B.Sc Computer Science, University of Lagos, 2022`;
 $("saveBtn").onclick=()=>{ const f=readFields(); if(!f.name){alert("Please add your name.");return;} store.set("cvt_fields",f); $("s2").scrollIntoView({behavior:"smooth"}); };
 $("clearBtn").onclick=()=>{ if(!confirm("Clear your saved CV from this browser?"))return; try{localStorage.removeItem("cvt_fields")}catch(e){} location.reload(); };
 
@@ -365,7 +385,7 @@ function renderJobs(files){
     h+=`<optgroup label="Jobs drop · ${niceDate(d)}">`+byDate[d].map(i=>`<option value="${i}">${esc(JOBS[i].title)} — ${esc(JOBS[i].company)}</option>`).join("")+"</optgroup>";
   }
   $("jobSel").innerHTML=h;
-  $("dropInfo").innerHTML=`Showing the last ${files.length} jobs drop${files.length>1?"s":""} (latest: <b>${niceDate(files[0].replace(".md",""))}</b>). New jobs appear here every Monday, Wednesday and Friday.`;
+  $("dropInfo").innerHTML=`${files.length>1?`Showing the last ${files.length} jobs drops`:"Showing the latest jobs drop"} (<b>${niceDate(files[0].replace(".md",""))}</b>). New jobs appear here every Monday, Wednesday and Friday.`;
   const q=new URLSearchParams(location.search).get("job"); if(q){ const i=JOBS.findIndex(j=>(j.title+" "+j.company).toLowerCase().includes(q.toLowerCase())); if(i>=0){$("jobSel").value=i; showJob();} }
 }
 function currentJob(){
@@ -398,10 +418,18 @@ $("tailorBtn").onclick=()=>{
   $("scoreTxt").textContent= jk.length? (pct>=70?"Strong match. Apply today.": pct>=40?"Good start. Recruiters say ~70% of the requirements is enough to apply.":"Low match for now. Apply if you can show the basics, and use the list below as your study plan.") : "We couldn't spot specific tools in this ad. Your CV will still be cleaned up and focused on the job title.";
   $("have").innerHTML=have.map(k=>`<span class="chip ok">${esc(k.name)}</span>`).join("")||'<span class="note">None yet</span>';
   $("miss").innerHTML=miss.map((k,i)=>`<label><input type="checkbox" value="${i}"> ${esc(k.name)}</label>`).join("");
+  MATCH.base=pct; $("miss").onchange=liveScore;
   show("missWrap",miss.length>0); show("s3"); show("s4",false);
   $("s3").scrollIntoView({behavior:"smooth"});
 };
 
+function liveScore(){
+  const n=MATCH.have.length+document.querySelectorAll("#miss input:checked").length;
+  const pct=MATCH.jk.length?Math.round(n/MATCH.jk.length*100):0;
+  $("scoreNum").textContent=pct+"%"; $("scoreBar").style.width=pct+"%";
+  $("scoreBar").style.background=pct>=70?"var(--ok)":pct>=40?"var(--warn)":"var(--bad)";
+  $("scoreTxt").textContent= pct>MATCH.base ? `Your match went from ${MATCH.base}% to ${pct}% 🚀 ${pct>=70?"Strong match. Apply today.":"Good. ~70% of the requirements is enough to apply."}` : $("scoreTxt").textContent;
+}
 /* ---------- STEP 4: build tailored CV ---------- */
 function cleanTitle(t){ return t.replace(/\(.*?\)/g,"").replace(/\b(senior|sr\.?|lead|level\s*\d|l\d|ii|iii)\b/ig,"").replace(/\s{2,}/g," ").trim(); }
 function score(text,kws){ return kws.reduce((s,k)=>s+(k.rx.test(text)?1:0),0); }
