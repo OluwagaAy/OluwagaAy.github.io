@@ -4,6 +4,6 @@
 // each signed-in student may read or change.
 window.CVT_CONFIG = {
   supabaseUrl: "https://fxxnqdrmankpogtuiuqe.supabase.co",
-  supabaseKey: "PASTE_PUBLISHABLE_KEY_HERE",
+  supabaseKey: "sb_publishable_gQV1yRqkXvhnqIzQOS8srQ_vHF7bGYS",
   googleSignIn: false   // set to true once Google sign-in is switched on in Supabase
 };
