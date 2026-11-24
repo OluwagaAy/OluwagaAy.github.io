@@ -119,6 +119,22 @@ nav .links a:hover,nav .links a:focus-visible{color:var(--ink)}
 .gal{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:28px}
 .gal .slot{aspect-ratio:4/3}
 .gal .big{grid-column:span 2;grid-row:span 2;aspect-ratio:auto}
+/* top strip + featured tool */
+.strip{display:block;background:var(--em);color:#04140d;text-align:center;font:600 14px/1.4 Inter,sans-serif;padding:9px 16px;text-decoration:none}
+.strip b{text-decoration:underline;text-underline-offset:3px}
+.strip:hover{filter:brightness(1.08)}
+.feat{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:28px;align-items:center;margin-top:28px;background:linear-gradient(135deg,color-mix(in srgb,var(--em) 16%,var(--panel)),var(--panel));border:1px solid var(--em);border-radius:20px;padding:clamp(20px,3vw,34px);text-decoration:none;color:inherit}
+.feat h3{font-size:clamp(22px,3vw,30px);margin-top:10px}
+.feat p{color:var(--mute);margin-top:10px}
+.feat ul{margin:14px 0 0;padding-left:20px;color:var(--ink);display:grid;gap:4px}
+.feat .tag{display:inline-block;font-size:13px;color:#04140d;background:var(--em2);border-radius:6px;padding:3px 9px;font-weight:600}
+.feat .mock{background:#fff;color:#111;border-radius:12px;padding:18px;font:12px/1.5 Inter;box-shadow:0 20px 50px #0008;transform:rotate(1.5deg)}
+.feat .mock b{font:800 16px Sora}
+.feat .mock i{display:block;height:7px;border-radius:4px;background:#e5e7eb;margin-top:7px}
+.feat .mock .hl{background:#19c37d55}
+.feat .score{display:flex;align-items:center;gap:8px;margin-top:12px;font-weight:700;color:#0a7a4c}
+.feat .score span{flex:1;height:8px;border-radius:4px;background:linear-gradient(90deg,#19c37d 78%,#e5e7eb 78%)}
+@media(max-width:800px){.feat{grid-template-columns:minmax(0,1fr)}.feat .mock{transform:none}}
 /* projects */
 .proj a{text-decoration:none;color:inherit}
 /* contact */
@@ -144,9 +160,10 @@ dialog ul{color:var(--mute);padding-left:20px}
 </style>
 </head>
 <body>
+<a class="strip" href="cv/">🆕 Job hunting? Try my free <b>CV Tailor</b>: match your CV to a real job in 2 minutes →</a>
 <nav><div class="wrap">
   <a class="logo" href="#top">Coach <span>A.Y.</span></a>
-  <div class="links"><a href="#trainings">Trainings</a><a href="#skills">Skills</a><a href="#journey">Journey</a><a href="#certs">Certifications</a><a href="#gallery">Gallery</a><a href="#contact">Contact</a></div>
+  <div class="links"><a href="#trainings">Trainings</a><a href="#skills">Skills</a><a href="#journey">Journey</a><a href="#certs">Certifications</a><a href="#gallery">Gallery</a><a href="#projects">Projects</a><a href="cv/" style="color:var(--em2);font-weight:600">CV Tailor</a><a href="#contact">Contact</a></div>
   <a class="btn" href="#contact">Book a training</a>
 </div></nav>
 
@@ -157,7 +174,7 @@ dialog ul{color:var(--mute);padding-left:20px}
       <h1>Ayomide Oluwaga<em>Known in the community as Coach A.Y.</em></h1>
       <p class="pitch" style="margin-top:22px"><span class="rot" id="rot">Cybersecurity &amp; AI Trainer</span></p>
       <p class="pitch">I help companies get secure and professionals get certified and hired. Not theory, not slide decks: the actual skills that keep systems safe.</p>
-      <div class="cta"><a class="btn" href="#contact">Request a training</a><a class="btn ghost" href="#console">Open my console</a></div>
+      <div class="cta"><a class="btn" href="#contact">Request a training</a><a class="btn ghost" href="cv/">Free CV Tailor</a><a class="btn ghost" href="#console">Open my console</a></div>
     </div>
     <div class="portrait">
       <div class="slot has" style="height:100%" data-slot="portrait"><img src="img/portrait.jpg" alt="Ayomide Oluwaga (Coach AY) speaking at a training session" style="object-position:50% 25%"></div>
@@ -226,8 +243,19 @@ dialog ul{color:var(--mute);padding-left:20px}
 </div></section>
 
 <section class="band alt" id="projects"><div class="wrap">
-  <h2>Open-source for learners</h2>
-  <p class="lead">Free resources I maintain on GitHub for people breaking into tech.</p>
+  <h2>Projects &amp; free tools</h2>
+  <p class="lead">Things I've built for people breaking into tech.</p>
+  <a class="feat" href="cv/">
+    <div>
+      <span class="tag">Built by Coach AY · Free</span>
+      <h3>CV Tailor</h3>
+      <p>My students kept telling me they were applying everywhere and hearing nothing back. So I built a tool that tailors <em>their own</em> CV to a specific job ad: it shows what the employer is asking for, what's missing, and produces a clean one-page PDF.</p>
+      <ul><li>Loads the fresh roles from my Tech Jobs Desk, or paste any job ad</li><li>Match score + a study list of the skills you're missing</li><li>3 CV templates, A4 PDF, plus a ready-to-send application email</li><li>Free student accounts: your CV stays private to you</li></ul>
+      <div class="cta" style="margin-top:20px"><span class="btn">Open the CV Tailor →</span></div>
+    </div>
+    <div class="mock" aria-hidden="true"><b>Your Name</b><div style="color:#0a7a4c;font-weight:600">SOC Analyst | Security+ | Splunk | Wireshark</div><i style="width:95%"></i><i class="hl" style="width:80%"></i><i style="width:88%"></i><i class="hl" style="width:60%"></i><i style="width:92%"></i><i style="width:70%"></i><div class="score">78% match <span></span></div></div>
+  </a>
+  <h3 style="margin-top:44px">Open-source for learners</h3>
   <div class="grid proj" id="projs"></div>
 </div></section>
 

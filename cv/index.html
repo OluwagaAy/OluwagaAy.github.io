@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CV Tailor · MAPELEAD × Coach AY</title>
-<meta name="description" content="Free tool for MAPELEAD students: put in your CV, pick a job from Coach AY's latest jobs drop, and get a CV tailored to that job in seconds.">
+<meta name="description" content="Free CV tool by Coach AY, for MAPELEAD students and everyone job hunting in tech: put in your CV, pick a job from Coach AY's latest jobs drop, and get a CV tailored to that job in seconds.">
 <style>
 :root{
   --bg:#f6f7fb; --card:#fff; --ink:#14213d; --muted:#5b6478; --line:#e3e6ef;
@@ -19,6 +19,20 @@ header.top{background:linear-gradient(135deg,#0b5cff,#14213d);color:#fff}
 header.top .wrap{padding:28px 16px 24px}
 header.top h1{margin:0 0 6px;font-size:28px;line-height:1.2}
 header.top p{margin:0;opacity:.92;max-width:680px}
+/* who is it for: public (blue) vs MAPELEAD students (MAPELEAD navy) */
+.modebar{display:flex;gap:6px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:5px;margin:16px 0 0}
+.modebar button{flex:1;border:0;background:none;border-radius:9px;padding:10px 8px;font:inherit;font-weight:600;color:var(--muted);cursor:pointer}
+.modebar button.on{background:var(--brand);color:#fff}
+.countdown{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;background:var(--chip);border:1px solid color-mix(in srgb,var(--brand) 25%,transparent);border-radius:12px;padding:12px 14px;margin-top:12px}
+.countdown .msgc{flex:1 1 260px;font-size:15px}
+.countdown .clock{display:flex;gap:6px}
+.countdown .clock span{display:grid;place-items:center;min-width:52px;background:var(--brand);color:#fff;border-radius:9px;padding:6px 4px;font:700 20px/1 system-ui;font-variant-numeric:tabular-nums}
+.countdown .clock small{display:block;font:600 10px/1.4 system-ui;opacity:.85;text-transform:uppercase;letter-spacing:.04em}
+body.mapelead{--brand:#14215b;--brand-2:#0c1540;--chip:#e8ebf7;--ink:#14215b}
+body.mapelead header.top{background:linear-gradient(135deg,#14215b,#22337f 60%,#14215b)}
+body.mapelead .acct .btn{color:#14215b!important}
+.mlogo{display:none;font:800 13px/1 system-ui;letter-spacing:.08em;background:#fff;color:#14215b;border-radius:6px;padding:5px 8px;margin-right:8px;vertical-align:middle}
+body.mapelead .mlogo{display:inline-block}
 .badge{display:inline-block;background:rgba(255,255,255,.16);border-radius:999px;padding:3px 10px;font-size:13px;margin-bottom:10px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin:16px 0;box-shadow:0 1px 2px rgba(20,33,61,.04)}
 .card h2{margin:0 0 4px;font-size:20px;display:flex;align-items:center;gap:10px}
@@ -101,12 +115,17 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
 </head>
 <body>
 <header class="top"><div class="wrap">
-  <span class="badge">Free for MAPELEAD students · by Coach AY</span>
+  <span class="mlogo">MAPELEAD</span><span class="badge" id="hBadge">Free · by Coach AY</span>
   <h1>CV Tailor: one CV, fitted to every job</h1>
-  <p>Put in your CV once. Pick a job from Coach AY's latest jobs drop. Get a CV rebuilt for that exact job, ready to save as PDF and send.</p>
+  <p id="hSub">Put in your CV once. Pick a job from Coach AY's latest jobs drop. Get a CV rebuilt for that exact job, ready to save as PDF and send.</p>
 </div></header>
 
 <main class="wrap">
+<div class="modebar" role="group" aria-label="Who is this for">
+  <button type="button" data-mode="public" id="mPublic">🌍 Everyone</button>
+  <button type="button" data-mode="mapelead" id="mMape">🎓 MAPELEAD students</button>
+</div>
+<div class="countdown" id="countdown" hidden><div class="msgc" id="cdMsg"></div><div class="clock" id="cdClock"></div></div>
 
 <section class="card howto">
   <h2>How to use it (2 minutes)</h2>
@@ -116,7 +135,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
     <li><b>Review the match</b>: see which skills the employer wants that your CV already shows, and tick any missing ones you <u>truly</u> have.</li>
     <li><b>Download your tailored CV</b> as PDF. Click anywhere on the preview to edit before you download. Then apply exactly how the job says.</li>
   </ol>
-  <p class="note">🔒 Your CV stays in this browser on your phone or laptop. It's only stored online if you switch on <b>"Save my CV to my account"</b>. Your account details are kept private by MAPELEAD and never shared with other students. See the privacy notice at the bottom of the page.</p>
+  <p class="note">🔒 Your CV stays in this browser on your phone or laptop. It's only stored online if you switch on <b>"Save my CV to my account"</b>. Your account details are kept private by <span class="orgName">Coach AY</span> and never shared with other students. See the privacy notice at the bottom of the page.</p>
 </section>
 
 <!-- STEP 1 -->
@@ -497,11 +516,29 @@ $("buildBtn").onclick=()=>{
   // headline
   const headline=[role, ...certsOwned.slice(0,1), ...tools.slice(0,3)].join(" | ");
   // summary: targeted first line + their own best sentences
-  const lt=(leadTools.length?leadTools:tools).slice(0,4);
-  const lead=`${isIntern?"Motivated":"Hands-on"} ${/intern|trainee/i.test(role)?role:role+" candidate"}${lt.length?` with practical experience in ${listJoin(lt)}`:""}${leadCerts.length?`, holding ${listJoin(leadCerts.slice(0,2))}`:""}.`;
+  // Each student gets their own wording: phrasing is picked from their own name and background,
+  // and built from their own years, most recent role, tools and certs, so two students applying
+  // to the same job never get the same opening line.
+  const seed=[...(f.name+"|"+f.contact)].reduce((h,c)=>(h*31+c.charCodeAt(0))>>>0,7);
+  const pick=(arr,k=0)=>arr[(seed>>>(k*3))%arr.length];
+  const lt=(leadTools.length?leadTools:tools).slice(0,3+(seed%2));
+  const yrsM=(f.summary+" "+f.exp).match(/(\d{1,2})\+?\s*(?:years?|yrs?)/i); const yrs=yrsM&&+yrsM[1]<=40?yrsM[1]:"";
+  const firstExp=parseExp(f.exp)[0]; const lastRole=firstExp?firstExp.title.split(/\s+(?:at|@|\||–|—|-|,)\s+/)[0].trim():"";
+  const lastRoleOk=lastRole && lastRole.length<45 && !/^\d/.test(lastRole) && lastRole.toLowerCase()!==role.toLowerCase();
+  const toolsTxt=listJoin(lt), certTxt=listJoin(leadCerts.slice(0,2));
+  const opener=isIntern?pick(["Motivated","Eager","Detail-oriented","Curious, fast-learning","Driven"]):pick(["Hands-on","Results-focused","Dependable","Practical","Detail-oriented"]);
+  const who=/intern|trainee|graduate/i.test(role)?role:pick([role+" candidate","aspiring "+role,role+" professional"],1);
+  const variants=[
+    ()=>`${opener} ${who}${yrs?` with ${yrs}+ years of experience`:""}${lt.length?`${yrs?" and":" with"} practical skills in ${toolsTxt}`:""}${certTxt?`, holding ${certTxt}`:""}.`,
+    ()=>`${lastRoleOk?`${lastRole} moving into ${role} work`:`${opener} ${who}`}${lt.length?`, working day to day with ${toolsTxt}`:""}${certTxt?`. ${certTxt} certified`:""}.`,
+    ()=>`${certTxt?`${certTxt}-certified `:""}${who.charAt(0).toUpperCase()+who.slice(1)}${yrs?` (${yrs}+ years)`:""}${lt.length?` whose toolkit includes ${toolsTxt}`:""}.`,
+    ()=>`${opener} ${who}${lt.length?` who has built real experience in ${toolsTxt}`:""}${lastRoleOk?` through work as a ${lastRole}`:""}${certTxt?`, and holds ${certTxt}`:""}.`
+  ];
+  let lead=pick(variants,2)().replace(/\s+([.,])/g,"$1").replace(/\.\./g,".");
+  lead=lead.charAt(0).toUpperCase()+lead.slice(1);
   const own=(f.summary||"").split(/(?<=[.!?])\s+/).filter(s=>s.length>20 && !/^(i am|i'm)?\s*(seeking|looking for) (a|an) (challenging|position)/i.test(s));
   own.sort((a,b)=>score(b,owned)-score(a,owned));
-  const closing=job.company?` Keen to bring this to ${job.company}.`:"";
+  const closing=job.company?pick([` Keen to bring this to ${job.company}.`,` Ready to contribute at ${job.company} from day one.`,` Looking to put these skills to work for ${job.company}.`,` Excited to support the team at ${job.company}.`,""],3):"";
   const summary=(lead+" "+own.slice(0,2).join(" ")+closing).replace(/\s+/g," ").trim();
   // skills: job-matched first
   const matchedNames=owned.filter(k=>k.cat==="tool"||k.cat==="skill"||k.cat==="framework").map(k=>k.name);
@@ -521,7 +558,11 @@ $("buildBtn").onclick=()=>{
   $("fname").textContent=fn+".pdf"; document.title=fn;
   const subj=(job.apply.match(/subject\s*`([^`]+)`/i)||job.apply.match(/subject[:\s]+["“]?([^"”\n]+)/i)||[])[1];
   const email=(job.apply.match(/[\w.+-]+@[\w-]+\.[\w.]+/g)||[]);
-  MATCH.emailTxt=`Subject: ${subj||("Application – "+job.title)}\n\nDear Hiring Team,\n\nI'm applying for the ${job.title} role${job.company?" at "+job.company:""}. My CV is attached.\n\nI have hands-on experience with ${listJoin(tools.slice(0,3))||"the core skills in your job description"}${certsOwned.length?" and hold "+certsOwned[0]:""}, and I can start immediately.\n\nThank you for your time.\n\n${f.name}\n${f.contact}`;
+  const atCo=job.company?" at "+job.company:"", tl=listJoin(tools.slice(0,3))||"the core skills in your job description", ce=certsOwned.length?certsOwned[0]:"";
+  const eOpen=pick([`I'm applying for the ${job.title} role${atCo}. My CV is attached.`,`Please find attached my CV for the ${job.title} position${atCo}.`,`I'd like to be considered for the ${job.title} role${atCo}, and have attached my CV.`],4);
+  const eBody=pick([`I have hands-on experience with ${tl}${ce?" and hold "+ce:""}, and I can start immediately.`,`My background covers ${tl}${ce?", and I'm "+ce+" certified":""}. I'm available to start right away.`,`I work with ${tl}${ce?" and hold "+ce:""}${lastRoleOk?`, most recently as ${/^[aeiou]/i.test(lastRole)?"an":"a"} ${lastRole}`:""}. I'd welcome the chance to discuss how I can help.`],5);
+  const eEnd=pick(["Thank you for your time.","Thank you for considering my application.","I look forward to hearing from you."],6);
+  MATCH.emailTxt=`Subject: ${subj||("Application – "+job.title)}\n\nDear Hiring Team,\n\n${eOpen}\n\n${eBody}\n\n${eEnd}\n\n${f.name}\n${f.contact}`;
   $("applyBox").innerHTML=`<b>How to apply</b>${job.apply?`<p style="margin:6px 0">${esc(job.apply).replace(/\[Indeed listing\]\((https?:[^)]+)\)/,'<a href="$1" target="_blank" rel="noopener">Indeed listing</a>')}</p>`:""}${email.length?`<p style="margin:4px 0">Email: <b>${email.map(esc).join(", ")}</b>${subj?` · Subject: <b>${esc(subj)}</b> (copy it exactly)`:""}</p>`:""}${job.link?`<p style="margin:4px 0"><a href="${esc(job.link)}" target="_blank" rel="noopener">Open the job post ↗</a></p>`:""}`;
   const tips=[];
   const weak=exp.flatMap(e=>e.bullets).filter(b=>!/\d/.test(b)).length;
@@ -529,6 +570,7 @@ $("buildBtn").onclick=()=>{
   if(!proj.length) tips.push(`No projects yet. Add 1–2 home-lab projects. Free guide: <a href="https://github.com/OluwagaAy/Cyber-Home-Lab-Starter" target="_blank" rel="noopener">Cyber Home Lab Starter</a>.`);
   if(!/linkedin/i.test(f.contact)) tips.push("Add your LinkedIn link to the contact line, and make your LinkedIn headline match the headline above.");
   if(miss.length-added.length>0) tips.push(`Still missing: ${miss.filter(k=>!added.includes(k)).slice(0,5).map(k=>esc(k.name)).join(", ")}. That's your study list for the next 2 weeks.`);
+  tips.push("Read the Profile line at the top and put it in your own words: recruiters notice copy-paste CVs.");
   tips.push("Keep it to 1–2 pages. Use the preview to cut anything that isn't relevant to <b>this</b> job.");
   tips.push(`Name the file <b>${esc(fn)}.pdf</b> and send it as PDF, never Word.`);
   if(email.length) tips.push("Email applications: use the exact subject line and keep the email body to 3–4 lines. Use the \"Copy application email\" button.");
@@ -594,6 +636,51 @@ $("emailBtn").onclick=e=>copy(MATCH.emailTxt,e.target);
     $("f_proj").value=(saved.proj||[]).join("\n"); $("f_edu").value=(saved.edu||[]).join("\n"); show("fields");
     $("parseMsg").innerHTML='<span class="ok">✔ Your saved CV is loaded. Go to step 2, or update it below.</span>'; }
   loadJobs();
+})();
+</script>
+<script>
+/* ---------- public vs MAPELEAD mode + free-launch countdown ---------- */
+(function(){
+  const FREE_UNTIL = new Date("2026-11-30T23:59:00+01:00");   // end of the free launch (Lagos time)
+  const q = new URLSearchParams(location.search).get("for");
+  let saved = null; try{ saved = localStorage.getItem("cvt_mode"); }catch(e){}
+  let mode = q==="mapelead"||q==="public" ? q : (saved||"public");
+  const dayStr = FREE_UNTIL.toLocaleDateString("en-GB",{day:"numeric",month:"long",timeZone:"Africa/Lagos"});
+  function apply(m){
+    mode = m; window.CVT_MODE = m; try{ localStorage.setItem("cvt_mode",m); }catch(e){}
+    const mp = m==="mapelead";
+    document.body.classList.toggle("mapelead", mp);
+    document.getElementById("mPublic").classList.toggle("on", !mp);
+    document.getElementById("mMape").classList.toggle("on", mp);
+    document.getElementById("hBadge").textContent = mp ? "For MAPELEAD students · by Coach AY" : "Free · by Coach AY";
+    document.getElementById("hSub").textContent = mp
+      ? "Built for MAPELEAD students after many of you told me your applications were getting no replies. Put in your CV once, pick a job from my latest jobs drop, and get a CV rebuilt for that exact job."
+      : "Put in your CV once. Pick a job from Coach AY's latest jobs drop or paste any job ad. Get a CV rebuilt for that exact job, ready to save as PDF and send.";
+    document.querySelectorAll(".orgName").forEach(e=>e.textContent = mp ? "MAPELEAD" : "Coach AY");
+    document.title = mp ? "CV Tailor · MAPELEAD students" : "CV Tailor · by Coach AY";
+    const u = new URL(location.href); u.searchParams.set("for", m); history.replaceState(null,"",u);
+    tick();
+    document.dispatchEvent(new CustomEvent("cvt-mode",{detail:m}));
+  }
+  const pad = n => String(n).padStart(2,"0");
+  function tick(){
+    const box = document.getElementById("countdown"), ms = FREE_UNTIL - Date.now();
+    box.hidden = false;
+    if(ms <= 0){
+      document.getElementById("cdClock").innerHTML = "";
+      document.getElementById("cdMsg").innerHTML = mode==="mapelead"
+        ? "<b>The free launch has ended.</b> MAPELEAD students who signed up during the launch keep free access."
+        : "<b>The free launch has ended.</b> Paid plans are coming soon.";
+      return;
+    }
+    const d=Math.floor(ms/864e5), h=Math.floor(ms/36e5)%24, mi=Math.floor(ms/6e4)%60, s=Math.floor(ms/1e3)%60;
+    document.getElementById("cdClock").innerHTML = [[d,"days"],[h,"hrs"],[mi,"mins"],[s,"secs"]].map(([v,l])=>`<span>${pad(v)}<small>${l}</small></span>`).join("");
+    document.getElementById("cdMsg").innerHTML = mode==="mapelead"
+      ? `🎓 <b>Free for MAPELEAD students.</b> Create your account before <b>${dayStr}</b> to keep free access when CV Tailor becomes a paid service.`
+      : `🎉 <b>Free launch: everyone can use CV Tailor free until ${dayStr}.</b> After that it becomes a paid service. Create your free account now.`;
+  }
+  document.querySelectorAll(".modebar button").forEach(b=>b.onclick=()=>apply(b.dataset.mode));
+  apply(mode); setInterval(tick, 1000);
 })();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>

@@ -12,7 +12,7 @@ const TRACKS = ["SOC / Cyber analyst","GRC / Compliance","IT Support / Helpdesk"
 const css = document.createElement("style");
 css.textContent = `
 .acct{position:absolute;top:14px;right:max(16px,env(safe-area-inset-right,0px));display:flex;gap:8px;align-items:center}
-.acct .btn{padding:8px 14px;font-size:14px;background:#fff;color:#0b5cff}
+.acct .btn{padding:8px 14px;font-size:14px;background:#fff;color:var(--brand)}
 .acct .who{color:#fff;font-weight:600;font-size:14px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 header.top{position:relative}
 @media (max-width:640px){header.top .wrap{padding-top:66px}}
@@ -22,7 +22,7 @@ header.top{position:relative}
 .mbox .x{float:right;border:0;background:none;font-size:22px;cursor:pointer;color:#5b6478}
 .gbtn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;border:1px solid #d5dbe8;background:#fff;border-radius:10px;padding:11px;font:inherit;font-weight:600;cursor:pointer}
 .sep{display:flex;align-items:center;gap:10px;color:#8a93a8;font-size:13px;margin:14px 0}.sep:before,.sep:after{content:"";flex:1;border-top:1px solid #e3e6ef}
-.tabs2{display:flex;gap:6px;margin:12px 0}.tabs2 button{flex:1;border:1px solid #d5dbe8;background:#f6f7fb;border-radius:8px;padding:8px;font:inherit;font-weight:600;cursor:pointer}.tabs2 button.on{background:#0b5cff;color:#fff;border-color:#0b5cff}
+.tabs2{display:flex;gap:6px;margin:12px 0}.tabs2 button{flex:1;border:1px solid #d5dbe8;background:#f6f7fb;border-radius:8px;padding:8px;font:inherit;font-weight:600;cursor:pointer}.tabs2 button.on{background:var(--brand);color:#fff;border-color:var(--brand)}
 .msg{font-size:14px;margin-top:10px}.msg.err{color:#d93025}.msg.ok{color:#0f9d58}
 .consent{display:flex;gap:8px;align-items:flex-start;font-weight:500;font-size:14px;margin-top:12px}
 .consent input{margin-top:3px}
@@ -41,8 +41,8 @@ function modal(html){ closeModal(); const m=document.createElement("div"); m.cla
 function closeModal(){ const m=$("cvtModal"); if(m) m.remove(); }
 
 const PRIVACY = `<div class="pv"><h3>Privacy notice</h3><p class="note">CV Tailor is run by MAPELEAD (Coach AY). Plain words, no tricks.</p>
-<h4>What we collect</h4><p>Your name, email, WhatsApp number, MAPELEAD class and career track, and which jobs you tailor your CV for. Your CV itself is stored <b>only if you switch on "Save my CV to my account"</b>. Otherwise it stays in your browser.</p>
-<h4>Why</h4><p>To give you free access as a MAPELEAD student, to keep your CV on all your devices if you choose, and to send you jobs that match your track.</p>
+<h4>What we collect</h4><p>Your name, email, WhatsApp number, MAPELEAD class (if any) and career track, and which jobs you tailor your CV for. Your CV itself is stored <b>only if you switch on "Save my CV to my account"</b>. Otherwise it stays in your browser.</p>
+<h4>Why</h4><p>To run your account (and confirm free access for MAPELEAD students), to keep your CV on all your devices if you choose, and to send you jobs that match your track.</p>
 <h4>Who can see it</h4><p>Only you and the MAPELEAD team. Other students can never see your data. We never sell it.</p>
 <h4>Your rights</h4><p>You can edit your details or delete your account and all your data at any time from <b>My account</b>. Questions: message Coach AY on WhatsApp.</p>
 <p class="note">This follows the Nigeria Data Protection Act 2023.</p></div>`;
@@ -66,7 +66,7 @@ function renderBar(){
 /* ---------- sign in / sign up ---------- */
 function openAuth(reason){
   const m=modal(`<button class="x" aria-label="Close">×</button><h3>Your free CV Tailor account</h3>
-  <p class="note">${reason||"Free for MAPELEAD students. Create your account early to keep free access."}</p>
+  <p class="note">${reason||(window.CVT_MODE==="mapelead"?"Free for MAPELEAD students. Create your account early to keep free access.":"Free during the launch. Create your account to start tailoring your CV.")}</p>
   ${CFG.googleSignIn?`<button class="gbtn" id="gIn"><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>Continue with Google</button><div class="sep">or with email</div>`:""}
   <div class="tabs2"><button class="on" data-m="up">Create account</button><button data-m="in">Sign in</button></div>
   <label for="aEmail">Email</label><input type="email" id="aEmail" autocomplete="email">
@@ -104,10 +104,10 @@ function friendly(m){
 function openProfile(first){
   const p=PROFILE||{};
   const m=modal(`${first?"":`<button class="x" aria-label="Close">×</button>`}<h3>${first?"Welcome! One last step":"My details"}</h3>
-  <p class="note">${first?"Tell us who you are so we can confirm your free MAPELEAD access and send you jobs for your track.":"Update your details."}</p>
+  <p class="note">${first?(window.CVT_MODE==="mapelead"?"Tell us who you are so we can confirm your free MAPELEAD access and send you jobs for your track.":"Tell us a little about you so we can send you jobs for your track."):"Update your details."}</p>
   <label for="pName">Full name</label><input type="text" id="pName" value="${esc(p.full_name||"")}" autocomplete="name">
   <label for="pPhone">WhatsApp number</label><input type="text" id="pPhone" value="${esc(p.phone||"")}" placeholder="+234…" autocomplete="tel">
-  <label for="pCohort">Your MAPELEAD class</label><select id="pCohort"><option value="">Choose…</option>${COHORTS.map(c=>`<option ${p.cohort===c?"selected":""}>${esc(c)}</option>`).join("")}</select>
+  <label for="pCohort">${window.CVT_MODE==="mapelead"?"Your MAPELEAD class":"Are you a MAPELEAD student?"}</label><select id="pCohort"><option value="">Choose…</option>${(window.CVT_MODE==="mapelead"?COHORTS:[COHORTS[COHORTS.length-1],...COHORTS.slice(0,-1)]).map(c=>`<option ${(p.cohort===c||(!p.cohort&&window.CVT_MODE!=="mapelead"&&/not a MAPELEAD/i.test(c)))?"selected":""}>${esc(c)}</option>`).join("")}</select>
   <label for="pTrack">Which jobs are you going for?</label><select id="pTrack"><option value="">Choose…</option>${TRACKS.map(c=>`<option ${p.track===c?"selected":""}>${esc(c)}</option>`).join("")}</select>
   ${first?`<label class="consent"><input type="checkbox" id="pOk"> <span>I agree to the <a href="#" id="pPv">privacy notice</a>: MAPELEAD can store these details to run my account and send me job updates.</span></label>`:""}
   <div class="btns"><button class="btn" id="pSave" style="width:100%">${first?"Finish and continue":"Save"}</button></div><div class="msg" id="pMsg"></div>`);
@@ -117,7 +117,7 @@ function openProfile(first){
     const msg=t=>{ $("pMsg").textContent=t; $("pMsg").className="msg err"; };
     if(full_name.length<3) return msg("Please enter your full name.");
     if(!/^\+?[\d\s()-]{7,}$/.test(phone)) return msg("Please enter a valid WhatsApp number.");
-    if(!cohort) return msg("Please choose your MAPELEAD class.");
+    if(!cohort) return msg(window.CVT_MODE==="mapelead"?"Please choose your MAPELEAD class.":"Please choose an option.");
     if(first && !$("pOk").checked) return msg("Please tick the box to agree to the privacy notice.");
     const row={id:USER.id,full_name,phone,cohort,track,email:USER.email,is_mapelead_student:!/not a MAPELEAD/i.test(cohort),updated_at:new Date().toISOString()};
     if(first) row.consent_at=new Date().toISOString();
@@ -169,10 +169,12 @@ $("tailorBtn").addEventListener("click",e=>{
   if(USER && PROFILE) return;
   e.stopImmediatePropagation(); e.preventDefault();
   PENDING=()=>$("tailorBtn").click();
-  if(USER && !PROFILE) openProfile(true); else openAuth("Create your free account to tailor your CV. Free for MAPELEAD students. Sign up early to keep free access.");
+  if(USER && !PROFILE) openProfile(true); else openAuth(window.CVT_MODE==="mapelead"?"Create your free account to tailor your CV. Free for MAPELEAD students. Sign up early to keep free access.":"Create your free account to tailor your CV. It takes 30 seconds and it's free during the launch.");
 },true);
 function runPending(){ if(PENDING && USER && PROFILE){ const f=PENDING; PENDING=null; setTimeout(f,50); } }
-$("s2").insertAdjacentHTML("beforeend",`<div class="gate" id="gateNote">🔐 You'll need a free account for this step. It's free for MAPELEAD students. Sign up early to keep free access.</div>`);
+$("s2").insertAdjacentHTML("beforeend",`<div class="gate" id="gateNote"></div>`);
+function gateTxt(){ const g=$("gateNote"); if(g) g.textContent = window.CVT_MODE==="mapelead" ? "🔐 You'll need a free account for this step. It's free for MAPELEAD students. Sign up early to keep free access." : "🔐 You'll need a free account for this step. It's free during the launch: watch the countdown at the top."; }
+gateTxt(); document.addEventListener("cvt-mode",gateTxt);
 
 /* ---------- usage log ---------- */
 $("buildBtn").addEventListener("click",()=>{ setTimeout(()=>{ try{ if(!USER||typeof MATCH==="undefined"||!MATCH) return; const pct=parseInt($("scoreNum").textContent)||null; sb.from("tailor_events").insert({job_title:MATCH.job.title,company:MATCH.job.company||null,match_pct:pct,template:(typeof TPL!=="undefined"?TPL:null)}).then(()=>{}); }catch(e){} },100); });
