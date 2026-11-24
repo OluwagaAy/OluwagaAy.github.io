@@ -42,8 +42,8 @@ function closeModal(){ const m=$("cvtModal"); if(m) m.remove(); }
 
 const PRIVACY = `<div class="pv"><h3>Privacy notice</h3><p class="note">CV Tailor is run by MAPELEAD (Coach AY). Plain words, no tricks.</p>
 <h4>What we collect</h4><p>Your name, email, WhatsApp number, MAPELEAD class (if any) and career track, and which jobs you tailor your CV for. Your CV itself is stored <b>only if you switch on "Save my CV to my account"</b>. Otherwise it stays in your browser.</p>
-<h4>Why</h4><p>To run your account (and confirm free access for MAPELEAD students), to keep your CV on all your devices if you choose, and to send you jobs that match your track.</p>
-<h4>Who can see it</h4><p>Only you and the MAPELEAD team. Other students can never see your data. We never sell it.</p>
+<h4>Why</h4><p>To run your account (and confirm free access for MAPELEAD students), to keep your CV on all your devices if you choose, and to email you jobs and tips that match your track. If you also tick "Send me news about MAPELEAD programmes", we may email you about upcoming MAPELEAD classes and offers. That part is optional and you can turn it off any time.</p>
+<h4>Who can see it</h4><p>Only you and the MAPELEAD team. Other students can never see your data. We never sell it. We use Brevo to send our emails, so your name and email are shared with Brevo for that purpose only. Every email has an unsubscribe link.</p>
 <h4>Your rights</h4><p>You can edit your details or delete your account and all your data at any time from <b>My account</b>. Questions: message Coach AY on WhatsApp.</p>
 <p class="note">This follows the Nigeria Data Protection Act 2023.</p></div>`;
 document.querySelector("footer").insertAdjacentHTML("beforeend",`<br><a href="#" id="pvLink">Privacy notice</a>`);
@@ -109,7 +109,8 @@ function openProfile(first){
   <label for="pPhone">WhatsApp number</label><input type="text" id="pPhone" value="${esc(p.phone||"")}" placeholder="+234…" autocomplete="tel">
   <label for="pCohort">${window.CVT_MODE==="mapelead"?"Your MAPELEAD class":"Are you a MAPELEAD student?"}</label><select id="pCohort"><option value="">Choose…</option>${(window.CVT_MODE==="mapelead"?COHORTS:[COHORTS[COHORTS.length-1],...COHORTS.slice(0,-1)]).map(c=>`<option ${(p.cohort===c||(!p.cohort&&window.CVT_MODE!=="mapelead"&&/not a MAPELEAD/i.test(c)))?"selected":""}>${esc(c)}</option>`).join("")}</select>
   <label for="pTrack">Which jobs are you going for?</label><select id="pTrack"><option value="">Choose…</option>${TRACKS.map(c=>`<option ${p.track===c?"selected":""}>${esc(c)}</option>`).join("")}</select>
-  ${first?`<label class="consent"><input type="checkbox" id="pOk"> <span>I agree to the <a href="#" id="pPv">privacy notice</a>: MAPELEAD can store these details to run my account and send me job updates.</span></label>`:""}
+  ${first?`<label class="consent"><input type="checkbox" id="pOk"> <span>I agree to the <a href="#" id="pPv">privacy notice</a>: MAPELEAD can store these details to run my account and email me job updates.</span></label>`:""}
+  <label class="consent"><input type="checkbox" id="pNews" ${p.marketing_ok?"checked":""}> <span>Send me news about MAPELEAD programmes and offers <span class="note">(optional, unsubscribe any time)</span></span></label>
   <div class="btns"><button class="btn" id="pSave" style="width:100%">${first?"Finish and continue":"Save"}</button></div><div class="msg" id="pMsg"></div>`);
   if($("pPv")) $("pPv").onclick=e=>{ e.preventDefault(); alertBox(PRIVACY, ()=>openProfile(first)); };
   $("pSave").onclick=async()=>{
@@ -121,10 +122,25 @@ function openProfile(first){
     if(first && !$("pOk").checked) return msg("Please tick the box to agree to the privacy notice.");
     const row={id:USER.id,full_name,phone,cohort,track,email:USER.email,is_mapelead_student:!/not a MAPELEAD/i.test(cohort),updated_at:new Date().toISOString()};
     if(first) row.consent_at=new Date().toISOString();
+    row.marketing_ok=$("pNews").checked; if(row.marketing_ok && !p.marketing_ok) row.marketing_at=new Date().toISOString();
     const {data,error}=await sb.from("profiles").upsert(row).select().single();
     if(error) return msg("Couldn't save: "+error.message);
-    PROFILE=data; closeModal(); renderBar(); runPending(); refreshCount();
+    PROFILE=data; closeModal(); renderBar(); refreshCount();
+    if(first && !data.is_mapelead_student) welcomeDeal(); else runPending();
   };
+}
+function welcomeDeal(){
+  const m=modal(`<h3>You're in! 🎉</h3>
+  <p class="note">Your free CV Tailor account is ready. One thing before you start: here's what MAPELEAD students get.</p>
+  <table style="width:100%;border-collapse:collapse;font-size:14px;margin-top:10px">
+    <tr><th style="text-align:left;padding:6px"></th><th style="text-align:left;padding:6px;color:#5b6478">You now</th><th style="text-align:left;padding:6px;background:#14215b;color:#fff;border-radius:8px 8px 0 0">MAPELEAD student</th></tr>
+    <tr><td style="padding:6px;border-top:1px solid #e3e6ef">CV Tailor after 30 Nov</td><td style="padding:6px;border-top:1px solid #e3e6ef">Paid</td><td style="padding:6px;border-top:1px solid #e3e6ef;background:#eef0f9;font-weight:600">✅ Free</td></tr>
+    <tr><td style="padding:6px;border-top:1px solid #e3e6ef">Jobs Mon/Wed/Fri</td><td style="padding:6px;border-top:1px solid #e3e6ef">Public channel</td><td style="padding:6px;border-top:1px solid #e3e6ef;background:#eef0f9;font-weight:600">✅ In your class group</td></tr>
+    <tr><td style="padding:6px;border-top:1px solid #e3e6ef">Mentorship community</td><td style="padding:6px;border-top:1px solid #e3e6ef">—</td><td style="padding:6px;border-top:1px solid #e3e6ef;background:#eef0f9;font-weight:600">✅ Included</td></tr>
+    <tr><td style="padding:6px;border-top:1px solid #e3e6ef">Hands-on training</td><td style="padding:6px;border-top:1px solid #e3e6ef">—</td><td style="padding:6px;border-top:1px solid #e3e6ef;background:#eef0f9;font-weight:600">✅ Included</td></tr>
+  </table>
+  <div class="btns" style="flex-direction:column;gap:8px"><a class="btn" href="https://mapelead.org" target="_blank" rel="noopener" style="text-align:center;text-decoration:none;background:#14215b">See the next MAPELEAD cohort →</a><button class="btn ghost" id="wGo" style="width:100%">Continue to tailor my CV</button></div>`);
+  $("wGo").onclick=()=>{ closeModal(); runPending(); };
 }
 function alertBox(html,after){ const m=modal(html+`<div class="btns"><button class="btn" id="okB" style="width:100%">OK</button></div>`); $("okB").onclick=()=>{ closeModal(); if(after) after(); }; }
 
