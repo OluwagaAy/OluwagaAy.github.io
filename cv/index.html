@@ -28,6 +28,17 @@ header.top p{margin:0;opacity:.92;max-width:680px}
 .countdown .clock{display:flex;gap:6px}
 .countdown .clock span{display:grid;place-items:center;min-width:52px;background:var(--brand);color:#fff;border-radius:9px;padding:6px 4px;font:700 20px/1 system-ui;font-variant-numeric:tabular-nums}
 .countdown .clock small{display:block;font:600 10px/1.4 system-ui;opacity:.85;text-transform:uppercase;letter-spacing:.04em}
+.countdown .bf{display:inline-block;background:#111;color:#fff;font:800 12px/1 system-ui;letter-spacing:.08em;border-radius:6px;padding:5px 8px;margin-right:6px;vertical-align:1px}
+.countdown .clock span{background:#111}
+.deal{margin-top:12px}
+.deal table{width:100%;border-collapse:collapse;font-size:15px}
+.deal th,.deal td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.deal th{font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.deal th.mp,.deal td.mp{background:#eef0f9;color:#14215b;font-weight:600}
+.deal th.mp{background:#14215b;color:#fff;border-radius:8px 8px 0 0}
+.deal .cta2{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-top:14px;background:#14215b;color:#fff;border-radius:12px;padding:14px 16px}
+.deal .cta2[hidden]{display:none}
+.deal .cta2 a{background:#fff;color:#14215b;font-weight:700;text-decoration:none;border-radius:9px;padding:10px 14px;white-space:nowrap}
 body.mapelead{--brand:#14215b;--brand-2:#0c1540;--chip:#e8ebf7;--ink:#14215b}
 body.mapelead header.top{background:linear-gradient(135deg,#14215b,#22337f 60%,#14215b)}
 body.mapelead .acct .btn{color:#14215b!important}
@@ -126,6 +137,17 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
   <button type="button" data-mode="mapelead" id="mMape">🎓 MAPELEAD students</button>
 </div>
 <div class="countdown" id="countdown" hidden><div class="msgc" id="cdMsg"></div><div class="clock" id="cdClock"></div></div>
+<section class="card deal" id="deal">
+  <h2 id="dealH">🎓 MAPELEAD students get the better deal</h2>
+  <table>
+    <tr><th></th><th>Everyone</th><th class="mp">MAPELEAD students</th></tr>
+    <tr><td>CV Tailor after 30 November</td><td>Paid</td><td class="mp">✅ Free (sign up by 30 Nov)</td></tr>
+    <tr><td>Fresh tech jobs every Mon/Wed/Fri</td><td>On the public channel</td><td class="mp">✅ Straight into your class WhatsApp group</td></tr>
+    <tr><td>Coach AY's mentorship community</td><td>—</td><td class="mp">✅ Included</td></tr>
+    <tr><td>Hands-on training and certification prep</td><td>—</td><td class="mp">✅ Included</td></tr>
+  </table>
+  <div class="cta2" id="dealCta"><span><b>Want the MAPELEAD deal?</b> Join the next MAPELEAD cohort and get all of this.</span><a href="https://mapelead.org" target="_blank" rel="noopener">See the next cohort →</a></div>
+</section>
 
 <section class="card howto">
   <h2>How to use it (2 minutes)</h2>
@@ -657,6 +679,8 @@ $("emailBtn").onclick=e=>copy(MATCH.emailTxt,e.target);
       ? "Built for MAPELEAD students after many of you told me your applications were getting no replies. Put in your CV once, pick a job from my latest jobs drop, and get a CV rebuilt for that exact job."
       : "Put in your CV once. Pick a job from Coach AY's latest jobs drop or paste any job ad. Get a CV rebuilt for that exact job, ready to save as PDF and send.";
     document.querySelectorAll(".orgName").forEach(e=>e.textContent = mp ? "MAPELEAD" : "Coach AY");
+    document.getElementById("dealH").textContent = mp ? "🎓 You've got the better deal" : "🎓 MAPELEAD students get the better deal";
+    document.getElementById("dealCta").hidden = mp;
     document.title = mp ? "CV Tailor · MAPELEAD students" : "CV Tailor · by Coach AY";
     const u = new URL(location.href); u.searchParams.set("for", m); history.replaceState(null,"",u);
     tick();
@@ -669,15 +693,15 @@ $("emailBtn").onclick=e=>copy(MATCH.emailTxt,e.target);
     if(ms <= 0){
       document.getElementById("cdClock").innerHTML = "";
       document.getElementById("cdMsg").innerHTML = mode==="mapelead"
-        ? "<b>The free launch has ended.</b> MAPELEAD students who signed up during the launch keep free access."
-        : "<b>The free launch has ended.</b> Paid plans are coming soon.";
+        ? "<b>The Black Friday deal has ended.</b> MAPELEAD students who signed up in time keep free access."
+        : "<b>The Black Friday deal has ended.</b> Paid plans are coming soon.";
       return;
     }
     const d=Math.floor(ms/864e5), h=Math.floor(ms/36e5)%24, mi=Math.floor(ms/6e4)%60, s=Math.floor(ms/1e3)%60;
     document.getElementById("cdClock").innerHTML = [[d,"days"],[h,"hrs"],[mi,"mins"],[s,"secs"]].map(([v,l])=>`<span>${pad(v)}<small>${l}</small></span>`).join("");
     document.getElementById("cdMsg").innerHTML = mode==="mapelead"
-      ? `🎓 <b>Free for MAPELEAD students.</b> Create your account before <b>${dayStr}</b> to keep free access when CV Tailor becomes a paid service.`
-      : `🎉 <b>Free launch: everyone can use CV Tailor free until ${dayStr}.</b> After that it becomes a paid service. Create your free account now.`;
+      ? `<span class="bf">BLACK FRIDAY</span> <b>MAPELEAD students: sign up before ${dayStr} and CV Tailor stays free for you</b> when it becomes a paid service.`
+      : `<span class="bf">BLACK FRIDAY</span> <b>CV Tailor is free for everyone until ${dayStr}.</b> After that it becomes a paid service. Create your free account now.`;
   }
   document.querySelectorAll(".modebar button").forEach(b=>b.onclick=()=>apply(b.dataset.mode));
   apply(mode); setInterval(tick, 1000);
