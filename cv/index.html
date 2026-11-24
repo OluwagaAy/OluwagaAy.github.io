@@ -30,6 +30,11 @@ header.top p{margin:0;opacity:.92;max-width:680px}
 .countdown .clock small{display:block;font:600 10px/1.4 system-ui;opacity:.85;text-transform:uppercase;letter-spacing:.04em}
 .countdown .bf{display:inline-block;background:#111;color:#fff;font:800 12px/1 system-ui;letter-spacing:.08em;border-radius:6px;padding:5px 8px;margin-right:6px;vertical-align:1px}
 .countdown .clock span{background:#111}
+.joined{flex-basis:100%;display:flex;align-items:center;gap:8px;font-size:15px;border-top:1px dashed color-mix(in srgb,var(--brand) 30%,transparent);padding-top:10px}
+.joined[hidden]{display:none}
+.joined b{font-size:18px;font-variant-numeric:tabular-nums}
+.joined .live{width:9px;height:9px;border-radius:50%;background:#19c37d;box-shadow:0 0 0 0 #19c37d88;animation:pulse 1.6s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 8px #19c37d00}100%{box-shadow:0 0 0 0 #19c37d00}}
 .deal{margin-top:12px}
 .deal table{width:100%;border-collapse:collapse;font-size:15px}
 .deal th,.deal td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
@@ -136,7 +141,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40p
   <button type="button" data-mode="public" id="mPublic">🌍 Everyone</button>
   <button type="button" data-mode="mapelead" id="mMape">🎓 MAPELEAD students</button>
 </div>
-<div class="countdown" id="countdown" hidden><div class="msgc" id="cdMsg"></div><div class="clock" id="cdClock"></div></div>
+<div class="countdown" id="countdown" hidden><div class="msgc" id="cdMsg"></div><div class="clock" id="cdClock"></div><div class="joined" id="joined" hidden></div></div>
 <section class="card deal" id="deal">
   <h2 id="dealH">🎓 MAPELEAD students get the better deal</h2>
   <table>
@@ -553,7 +558,7 @@ $("buildBtn").onclick=()=>{
   const variants=[
     ()=>`${opener} ${who}${yrs?` with ${yrs}+ years of experience`:""}${lt.length?`${yrs?" and":" with"} practical skills in ${toolsTxt}`:""}${certTxt?`, holding ${certTxt}`:""}.`,
     ()=>`${lastRoleOk?`${lastRole} moving into ${role} work`:`${opener} ${who}`}${lt.length?`, working day to day with ${toolsTxt}`:""}${certTxt?`. ${certTxt} certified`:""}.`,
-    ()=>`${certTxt?`${certTxt}-certified `:""}${who.charAt(0).toUpperCase()+who.slice(1)}${yrs?` (${yrs}+ years)`:""}${lt.length?` whose toolkit includes ${toolsTxt}`:""}.`,
+    ()=>`${certTxt?`${certTxt}-certified ${who}`:who}${yrs?` (${yrs}+ years)`:""}${lt.length?` whose toolkit includes ${toolsTxt}`:""}.`,
     ()=>`${opener} ${who}${lt.length?` who has built real experience in ${toolsTxt}`:""}${lastRoleOk?` through work as a ${lastRole}`:""}${certTxt?`, and holds ${certTxt}`:""}.`
   ];
   let lead=pick(variants,2)().replace(/\s+([.,])/g,"$1").replace(/\.\./g,".");

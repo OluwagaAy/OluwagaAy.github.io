@@ -123,7 +123,7 @@ function openProfile(first){
     if(first) row.consent_at=new Date().toISOString();
     const {data,error}=await sb.from("profiles").upsert(row).select().single();
     if(error) return msg("Couldn't save: "+error.message);
-    PROFILE=data; closeModal(); renderBar(); runPending();
+    PROFILE=data; closeModal(); renderBar(); runPending(); refreshCount();
   };
 }
 function alertBox(html,after){ const m=modal(html+`<div class="btns"><button class="btn" id="okB" style="width:100%">OK</button></div>`); $("okB").onclick=()=>{ closeModal(); if(after) after(); }; }
@@ -175,6 +175,23 @@ function runPending(){ if(PENDING && USER && PROFILE){ const f=PENDING; PENDING=
 $("s2").insertAdjacentHTML("beforeend",`<div class="gate" id="gateNote"></div>`);
 function gateTxt(){ const g=$("gateNote"); if(g) g.textContent = window.CVT_MODE==="mapelead" ? "🔐 You'll need a free account for this step. It's free for MAPELEAD students. Sign up early to keep free access." : "🔐 You'll need a free account for this step. It's free during the launch: watch the countdown at the top."; }
 gateTxt(); document.addEventListener("cvt-mode",gateTxt);
+
+/* ---------- live "people have joined" counter (totals only) ---------- */
+const SHOW_FROM = 5;   // only show the counter once at least this many people have joined
+let shownTotal = 0;
+async function refreshCount(){
+  try{
+    const {data,error}=await sb.rpc("signup_count"); if(error||!data) return;
+    const total=+data.total||0, mp=+data.mapelead||0, el=$("joined"); if(!el) return;
+    if(total<SHOW_FROM){ el.hidden=true; return; }
+    el.hidden=false;
+    const from=shownTotal||Math.max(0,total-25), start=performance.now();
+    const draw=n=>{ el.innerHTML=`<span class="live"></span><span><b>${n.toLocaleString()}</b> people have joined CV Tailor${mp?` · <b>${mp.toLocaleString()}</b> MAPELEAD students`:""}</span>`; };
+    const step=t=>{ const k=Math.min(1,(t-start)/900); draw(Math.round(from+(total-from)*k)); if(k<1) requestAnimationFrame(step); };
+    requestAnimationFrame(step); shownTotal=total;
+  }catch(e){}
+}
+refreshCount(); setInterval(refreshCount, 60000);
 
 /* ---------- usage log ---------- */
 $("buildBtn").addEventListener("click",()=>{ setTimeout(()=>{ try{ if(!USER||typeof MATCH==="undefined"||!MATCH) return; const pct=parseInt($("scoreNum").textContent)||null; sb.from("tailor_events").insert({job_title:MATCH.job.title,company:MATCH.job.company||null,match_pct:pct,template:(typeof TPL!=="undefined"?TPL:null)}).then(()=>{}); }catch(e){} },100); });
